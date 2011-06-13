@@ -1,4 +1,4 @@
-### SigFq.R  (2011-04-25)
+### SigFq.R  (2011-06-11)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,9 +19,9 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-SigFq <- function(D,B,p,q) 
+SigFq <- function(D,B,p,q,optres=NULL) 
 {
-   result <- list(p=p,q=q,B=B,D=D,res=NULL,call=NULL)
+   result <- list(p=p,q=q,B=B,D=D,optres=optres)
    class(result) <- "SigFq"
    result  # return(result) 
 }
@@ -32,20 +32,20 @@ as.matrix.SigFq <- function(x,...) diag(x$D)+x$B%*%t(x$B)
 
 print.SigFq <- function(x,...)
 {
-	cat("Call:\n") ; print(x$call)  
         if (is.null(x$B))  {
 	   cat("Minimization of approximation error failed.\nResults of the optimization routine:\n")
-           print(x$res)
+           print(x$optres)
         }
 	else {
-		cat("\nDimensionality of the assumed Factor model: ",x$q,"\n") 
-		cat("\nLoadings Matrix:\n") ; print(x$B)
+		cat(paste("Covariance matrix for a ",x$q,"-factor model\n",sep=""))
+		cat("\nLoadings:\n") ; print(x$B)
 		cat("\nSpecific Variances:\n",x$D,"\n")
 	} 
 }
 
 "+.SigFq" <- function(x,a)
 {	
+   if (is.null(x$B))  stop("Trying to add a NULL SigFq object\n")
    if (x$p==1)  {
    	if (is.SigFq(a)) return( matrix(x$D+x$B^2+a$D+a$B^2,1,1) )
    	if (is.SigFqInv(a)) return( matrix(x$D+x$B^2+a$D-a$B^2,1,1) )
@@ -58,6 +58,7 @@ print.SigFq <- function(x,...)
 
 "-.SigFq" <- function(x,a)
 {	
+   if (is.null(x$B))  stop("Trying to subtract a NULL SigFq object\n")
    if (x$p==1)  {
    	if (is.SigFq(a)) return( matrix(x$D+x$B^2-a$D-a$B^2,1,1) )
    	if (is.SigFqInv(a)) return( matrix(x$D+x$B^2-a$D+a$B^2,1,1) )
@@ -70,6 +71,7 @@ print.SigFq <- function(x,...)
 
 "*.SigFq" <- function(x,a)
 {
+   if (is.null(x$B))  stop("Trying to multiply the elements of a NULL SigFq object\n")
    if (x$p==1)  {
    	if (is.SigFq(a)) return( matrix((x$D+x$B^2)*(a$D+a$B^2),1,1) )
    	if (is.SigFqInv(a)) return( matrix((x$D+x$B^2)*(a$D-a$B^2),1,1) )
@@ -78,13 +80,14 @@ print.SigFq <- function(x,...)
    if (is.SigFq(a)) return( (diag(x$D)+x$B%*%t(x$B))*(diag(a$D)+a$B%*%t(a$B)) )
    if (is.SigFqInv(a)) return( (diag(x$D)+x$B%*%t(x$B))*(diag(a$D)-a$B%*%t(a$B)) )
    if (length(a)>1) return( (diag(x$D)+x$B%*%t(x$B))*a )
-   result <- list(p=x$p,q=x$q,B=sqrt(a)*x$B,D=a*x$D,res=NULL,call=NULL)
+   result <- list(p=x$p,q=x$q,B=sqrt(a)*x$B,D=a*x$D,optres=NULL)
    class(result) <- "SigFq"
    result  # return(result) 
 }
 
 "/.SigFq" <- function(x,a)
 {
+   if (is.null(x$B))  stop("Trying to divide the elements of a NULL SigFq object\n")
    if (x$p==1)  {
    	if (is.SigFq(a)) return( matrix((x$D+x$B^2)/(a$D+a$B^2),1,1) )
    	if (is.SigFqInv(a)) return( matrix((x$D+x$B^2)/(a$D-a$B^2),1,1) )
@@ -93,15 +96,17 @@ print.SigFq <- function(x,...)
    if (is.SigFq(a)) return( (diag(x$D)+x$B%*%t(x$B))/(diag(a$D)+a$B%*%t(a$B)) )
    if (is.SigFqInv(a)) return( (diag(x$D)-x$B%*%t(x$B))/(diag(a$D)+a$B%*%t(a$B)) )
    if (length(a)>1) return( (diag(x$D)+x$B%*%t(x$B))/a )
-   result <- list(p=x$p,q=x$q,B=x$B/sqrt(a),D=x$D/a,res=NULL,call=NULL)
+   result <- list(p=x$p,q=x$q,B=x$B/sqrt(a),D=x$D/a,optres=NULL)
    class(result) <- "SigFq"
    result  #  return(result) 
 }
 
 LeftMult <- function(x,a) UseMethod("LeftMult") 
+#LeftMult <- function(x,...) UseMethod("LeftMult") 
 
 LeftMult.SigFq <- function(x,a)
 {
+   if (is.null(x$B))  stop("Trying to multiply a NULL SigFq object\n")
    if (is.SigFq(a) || is.SigFqInv(a)) {
 	if (x$p>1) tmp1 <- diag(x$D*a$D)
 	else tmp1 <- x$D*a$D
@@ -122,6 +127,7 @@ RightMult <- function(x,a) UseMethod("RightMult")
 
 RightMult.SigFq <- function(x,a)
 {
+   if (is.null(x$B))  stop("Trying to multiply a NULL SigFq object\n")
    if (is.SigFq(a) || is.SigFqInv(a)) {
 	if (x$p>1) tmp1 <- diag(x$D*a$D)
 	else tmp1 <- x$D*a$D
@@ -137,6 +143,5 @@ RightMult.SigFq <- function(x,a)
    if (!is.matrix(a)) dim(result) <- c(x$p,1)
    result  # return(result)
 }
-
 
 

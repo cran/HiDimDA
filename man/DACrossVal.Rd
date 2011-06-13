@@ -9,29 +9,40 @@
 Cross-Validation.  
 }
 
-\usage{DACrossVal(x, grouping, TrainAlg, EvalAlg=EvalClrule, 
+\usage{DACrossVal(data, grouping, TrainAlg, EvalAlg=EvalClrule, 
 Strfolds=TRUE, kfold=10, CVrep=20, prior="proportions", \dots)}
 
 \arguments{
-  \item{x}{Matrix of observations.}
+
+  \item{data}{Matrix or data frame of observations.}
+
   \item{grouping}{Factor specifying the class for each observation.}
-  \item{TrainAlg}{A function with the training algorithm. It should return a list that can be used as input to the argument of \sQuote{EValAlg}.}
+
+  \item{TrainAlg}{A function with the training algorithm. It should return an object that can be used as input to the argument of \sQuote{EValAlg}.}
+
   \item{EvalAlg}{A function with the evaluation algorithm. By default set to \sQuote{EvalClrule} which returns a list with components \dQuote{err} (estimates of error rates by class) and \dQuote{Nk} (number of out-sample observations by class). This default can be used for all \sQuote{TrainAlg} 
 arguments that return an object with a predict method returning a list with a \sQuote{class} component (a factor) containing the classification results.}
+
   \item{Strfolds}{Boolean flag indicating if the folds should be stratified according to the original class
 proportions (default), or randomly generated from the whole training sample, ignoring class membership.}
+
   \item{kfold}{Number of training sample folds to be created in each replication.}
+
   \item{CVrep}{Number of replications to be performed.}
+
   \item{prior}{The prior probabilities of class membership.  If unspecified, the class proportions for the training set are used.  If present, the probabilities should be specified in the order of the factor levels.}
+
   \item{\dots}{Further arguments to be passed to \sQuote{TrainAlg} and \sQuote{EvalAlg}.} 
 }
 
-\value{A three dimensional array with the number of tested observations, and estimated classification errors for each combination of fold and replication tried. The array dimensions are defined as follows.\cr
-The first dimension runs through the different fold-replication combinations, the second dimension represents the classes, and the third dimension has two named levels representing respectively the number of observations tested (\dQuote{Nk}), and the estimated classification errors (\dQuote{Clerr}).}
+\value{A three dimensional array with the number of tested observations, and estimated classification errors for each combination of fold and replication tried. The array dimensions are defined as follows:\cr
+The first dimension runs through the different fold-replication combinations.\cr
+The second dimension represents the classes. \cr
+The third dimension has two named levels representing respectively the number of observations tested (\dQuote{Nk}), and the estimated classification errors (\dQuote{Clerr}).}
 
 \author{A. Pedro Duarte Silva}
 
-\seealso{\code{\link{lda}}, \code{\link{RFlda}}, \code{\link{predict.lda}}, \code{\link{predict.RFlda}}, \code{\link{AlonDS}}}
+\seealso{\code{\link{lda}}, \code{\link{RFlda}}, \code{\link{predict.lda}}, \code{\link{predict.RFlda}}}
 
 \examples{
 

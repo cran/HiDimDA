@@ -1,4 +1,4 @@
-### ForbSigAp.R  (2011-04-25)
+### FrobSigAp.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,7 +19,9 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-ForbSigap <- function(Sigma,q,nstarts=1,k0=NULL,penF=NULL)
+ForbSigap <- function(...) FrobSigAp(...)  # Wrapper, to ensure compability with version 0.1.0
+
+FrobSigAp <- function(Sigma,q,nstarts=1,k0=NULL,penF=NULL,atol=1E-20,rtol=sqrt(.Machine$double.eps))
 {
    p <- nrow(Sigma)
    if (p != ncol(Sigma)) stop("Matrix to be approximated (Sigma) is not square\n")
@@ -43,19 +45,23 @@ ForbSigap <- function(Sigma,q,nstarts=1,k0=NULL,penF=NULL)
    method <- "nlminb"
 
    optres <- RepLOptim(fr=f,gr=fgrad,inphess=fhess,parmean=pu,parsd=psd,nrep=nstarts,method=method,niter=it,nvar=p,q=q,
-			Sigma=Sigma,k0=k0,penF=penF)
+			Sigma=Sigma,k0=k0,penF=penF,atol=atol,rtol=rtol)
 
-   if (optres$convergence > 0) 
-	if (nstarts==1) warning("Sigma approximation routine did not converge for a model with ",q," factors. Check the optimization results (available on the 'res' field of the SigFq objects) to identify potentials problems, and/or try different starting points (using the 'nrep' argument) for the local optimization routine.")
-	else {
-		if (q>1) warning("Sigma approximation routine did not always converge for a model with ",q," factors. Check the optimization results (available on the 'res' field of the SigFq objects) to identify potentials problems.")
-		else warning("Sigma approximation routine did not always converge for a model with 1 factor. Check the optimization results (available on the 'res' field of the SigFq objects) to identify potentials problems.")
+   if (optres$convergence > 0)  { 
+	if (nstarts==1) {
+		if (q>1) warning("Sigma approximation routine did not converge for a model with ",q," factors. Check the optimization results (available on the 'optres' field of the SigFq objects) to identify potentials problems, and/or try different starting points (using the 'nrep' argument) for the local optimization routine.")
+		else warning("Sigma approximation routine did not converge for a model with 1 factor. Check the optimization results (available on the 'optres' field of the SigFq objects) to identify potentials problems, and/or try different starting points (using the 'nrep' argument) for the local optimization routine.")
 	}
+	else {
+		if (q>1) warning("Sigma approximation routine did not always converge for a model with ",q," factors. Check the optimization results (available on the 'optres' field of the SigFq objects) to identify potentials problems.")
+		else warning("Sigma approximation routine did not always converge for a model with 1 factor. Check the optimization results (available on the 'optres' field of the SigFq objects) to identify potentials problems.")
+	}
+   }
 
    B <- buildB(optres$par,p,q)
    if (p>1) D <- diag(Sigma) - apply(B,1,l2vnorm)
    else D <- Sigma[1,1] - apply(B,1,l2vnorm)
-   SigFq(D,B,p,q) # return(SigFq(D,B,p,q))
+   SigFq(D,B,p,q,optres) # return(SigFq(D,B,p,q,optres))
 }
 
 buildB <- function(par,p,q)

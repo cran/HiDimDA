@@ -1,5 +1,5 @@
 /*
-### RInterface.cpp  (2011-04-23)
+### RInterface.cpp  (2011-06-11)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -128,6 +128,8 @@ SEXP RFnDist1(SEXP B,SEXP p,SEXP q,SEXP SigmSr,SEXP Srank,SEXP k0,SEXP penF)
     int nvar = INTEGER(p)[0];	
     vector<int> ind;
     double *cres;;
+
+    ind.resize(nvar); 
     PROTECT(res = allocVector(REALSXP,1));
     cres = REAL(res);
     

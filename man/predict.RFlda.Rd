@@ -11,10 +11,15 @@
 }
 
 \arguments{
+
   \item{object}{An object of class \sQuote{RFlda}.}
+
   \item{newdata}{Matrix of cases to be classified.}
+
   \item{prior}{The prior probabilities used.} 
+
   \item{grpcodes}{Factor with the class codes. Set to 0:k-1 (k being the number of different classes) by default.}
+
   \item{\dots}{Further arguments passed to or from other methods.}
 }
 

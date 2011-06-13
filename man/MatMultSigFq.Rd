@@ -1,5 +1,7 @@
 \name{MatMultSigFq}
 
+\alias{LeftMult}
+\alias{RightMult}
 \alias{LeftMult.SigFq}
 \alias{RightMult.SigFq}
 \alias{LeftMult.SigFqInv}
@@ -27,5 +29,5 @@
 
 \value{A vector or a (traditional numeric) matrix with the result of the matrix product.}
 
-\seealso{\code{\link{ForbSigap}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{solve.SigFq}}, \code{\link{solve.SigFqInv}}}
+\seealso{\code{\link{FrobSigAp}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{solve.SigFq}}, \code{\link{solve.SigFqInv}}}
 

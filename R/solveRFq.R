@@ -1,4 +1,4 @@
-### Solve.R  (2011-04-20)
+### Solve.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -27,7 +27,11 @@ solve.SigFq <- function(a,b=NULL,...)
   if (a$p==1)  {
   	if (a$q==1) {
 		InnerM <- 1. + a$B*DiB
-		if (is.null(b)) return(SigFqInv(D=1./a$D,B=matrix(DiB/sqrt(InnerM),a$p,a$q),p=a$p,q=a$q))
+		if (is.null(b)) {
+			res <- list(D=1./a$D,B=matrix(DiB/sqrt(InnerM),a$p,a$q),p=a$p,q=a$q)
+			class(res) <- "SigFqInv"
+			return(res)
+		}
 		else {
 			Dib <-  drop(b/a$D)
 			return( Dib - (DiB*a$B/InnerM)*Dib )
@@ -35,7 +39,11 @@ solve.SigFq <- function(a,b=NULL,...)
 	}
   	else {
 		InnerM <- diag(a$q) + drop(a$B)%o%drop(DiB)
-		if (is.null(b)) return(SigFqInv(D=1./a$D,B=t(matrix(solve(t(chol(InnerM)),t(DiB)),a$p,a$q)),p=a$p,q=a$q))
+		if (is.null(b)) {
+			res <- list(D=1./a$D,B=t(matrix(solve(t(chol(InnerM)),t(DiB)),a$p,a$q)),p=a$p,q=a$q)
+			class(res) <- "SigFqInv"
+			return(res)
+		}
 		else {
 			if (!is.matrix(b)) bcol  <- 1
 			else bcol <- ncol(b)
@@ -47,7 +55,11 @@ solve.SigFq <- function(a,b=NULL,...)
   else  {
   	if (a$q==1) {
 		InnerM <- 1. + drop(t(a$B)%*%DiB)
-		if (is.null(b)) return(SigFqInv(D=1./a$D,B=matrix(DiB/sqrt(InnerM),a$p,a$q),p=a$p,q=a$q))
+		if (is.null(b)) {
+			res <- list(D=1./a$D,B=matrix(DiB/sqrt(InnerM),a$p,a$q),p=a$p,q=a$q)
+			class(res) <- "SigFqInv"
+			return(res)
+		}
 		else {
 			Dib <-  b / a$D
 			return( Dib - DiB*(t(a$B)%*%Dib)/InnerM )
@@ -55,7 +67,11 @@ solve.SigFq <- function(a,b=NULL,...)
 	}
   	else {
 		InnerM <- diag(a$q) + t(a$B)%*%DiB
-		if (is.null(b)) return(SigFqInv(D=1./a$D,B=t(solve(t(chol(InnerM)),t(DiB))),p=a$p,q=a$q))
+		if (is.null(b)) {
+			res <- list(D=1./a$D,B=t(solve(t(chol(InnerM)),t(DiB))),p=a$p,q=a$q)
+			class(res) <- "SigFqInv"
+			return(res)
+		}
 		else {
 			if (!is.matrix(b)) bcol  <- 1
 			else bcol <- ncol(b)

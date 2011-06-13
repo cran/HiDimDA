@@ -58,7 +58,7 @@ fhess <- function(par,nvar,q,k0,penF,Sigma)
 f1 <- function(par,nvar,q,k0,penF,SigmaSr,SigmaRank,lbound=NULL,ubound=NULL)
 {
 	if (any(!is.finite(par))) return(Inf)
-	.Call("RFnDist",
+	.Call("RFnDist1",
 			as.double(par),
 			as.integer(nvar),
 			as.integer(q),

@@ -1,5 +1,7 @@
 \name{HiDimDA-internal}
 
+\alias{ForbSigap}
+\alias{ForbSigap1}
 \alias{RepLOptim}
 \alias{buildB}
 \alias{f}

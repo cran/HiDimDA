@@ -1,4 +1,4 @@
-### RFlda.R  (2011-04-25)
+### RFlda.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,22 +19,22 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-RFlda <- function(x,...) {
-  if (is.null(class(x))) class(x) <- data.class(x)
+RFlda <- function(data,...) {
+  if (is.null(class(data))) class(data) <- data.class(data)
   UseMethod("RFlda") 
 }   
 
-RFlda.default <- function(x,grouping,q=1,prior="proportions",CorrAp=TRUE,maxq=5,VSelfunct=SelectV,nstarts=1,
+RFlda.default <- function(data,grouping,q=1,prior="proportions",CorrAp=TRUE,maxq=5,VSelfunct=SelectV,nstarts=1,
 				CVqtrials=1:3,CVqfolds=3,CVqrep=1,CVqStrt=TRUE,...)
 {
-  if (!is.matrix(x)) stop("'x' is not a matrix")
+  if (!is.matrix(data)) stop("'data' is not a matrix")
   if (!is.factor(grouping)) stop("'grouping' is not a factor")
-  n <- nrow(x)
-  if ( n != length(grouping)) stop("nrow(x) and length(grouping) are different")
+  n <- nrow(data)
+  if ( n != length(grouping)) stop("nrow(data) and length(grouping) are different")
   maxcol <- 2000   # Maximum dimensionality allowed for square matrices. Matrix square roots are ued when this limit is surpassed.
   if (is.numeric(q)) {
 	if (q > maxq) stop("The number of factors exceeds its upper limit of",maxq," . This limit can be increased by changing the value of the 'maxq' argument, but the resulting classification rule may take too long to compute.")
-	return(RFqlda(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...))
+	return(RFqlda(data,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...))
   }
   else  {
 
@@ -47,9 +47,9 @@ RFlda.default <- function(x,grouping,q=1,prior="proportions",CorrAp=TRUE,maxq=5,
   	CVResults <- array(dim=nbqtrials)
   	totrep <- CVqrep*CVqfolds
   	gcds <- levels(grouping)
-  	for (q in CVqtrials)  Results[[q]] <- RFqlda(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
+  	for (q in CVqtrials)  Results[[q]] <- RFqlda(data,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
   	for (q in CVqtrials)  {   
-		tmp <- DACrossVal(x,grouping,TrainAlg=TAl,kfold=CVqfolds,CVrep=CVqrep,Strfolds=CVqStrt,grpcodes=gcds,clrule=Results[[q]],...)
+		tmp <- DACrossVal(data,grouping,TrainAlg=TAl,kfold=CVqfolds,CVrep=CVqrep,Strfolds=CVqStrt,grpcodes=gcds,clrule=Results[[q]],...)
 		errates <- apply(tmp[,,1]*tmp[,,2],2,sum)/n
 		CVResults[q] <- mean(errates)
     	}
@@ -58,25 +58,25 @@ RFlda.default <- function(x,grouping,q=1,prior="proportions",CorrAp=TRUE,maxq=5,
     }
 }
 
-RFlda.data.frame <- function(x,...)
+RFlda.data.frame <- function(data,...)
 {
-   res <- RFlda.default(as.matrix(x),...)
+   res <- RFlda.default(as.matrix(data),...)
    res$call <- match.call()
    res
 }
 
-RFqlda <- function(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
+RFqlda <- function(data,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
 {
 
 #  Compute the matrices Xw and Xdelta of within and  between group deviations
 
-  if  ( !is.matrix(x) || !is.factor(grouping) || !is.numeric(q) ) stop("Arguments of wrong type")
+  if  ( !is.matrix(data) || !is.factor(grouping) || !is.numeric(q) ) stop("Arguments of wrong type")
   grp <- factor(grouping,levels<-sort(unique(grouping))) 
   nk <- table(grp)
   n <- sum(nk)
-  p <- ncol(x)
+  p <- ncol(data)
   k <- nrow(nk)
-  if (n != length(grouping) || n != nrow(x) ) stop("Argument dimensions do not match")
+  if (n != length(grouping) || n != nrow(data) ) stop("Argument dimensions do not match")
 
   if (is.character(VSelfunct)) {
 	if (VSelfunct=="none") {
@@ -87,23 +87,23 @@ RFqlda <- function(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
   }
   else  {
 	if (!is.function(VSelfunct)) stop("Invalid value for VSelfunct argument\n")
-        SelV <- VSelfunct(x,grouping,...)
+        SelV <- VSelfunct(data,grouping,...)
 	if (!is.list(SelV)) stop("Invalid value for VSelfunct argument\n")
 	m <- SelV$nvkpt
 	vkpt <- SelV$vkptInd
-	x <- matrix(x[,vkpt],n,m)
+	data <- matrix(data[,vkpt],n,m)
   }  
   if (CorrAp)  {
-  	sclres <- scalebygrps(x,grouping,k=k,nk=nk,n=n,p=m)
-  	x <- sclres$Xscld
+  	sclres <- scalebygrps(data,grouping,k=k,nk=nk,n=n,p=m)
+  	data <- sclres$Xscld
   }
   if (q > m) {
 	warning("Number of assumed factors reduced from",q,"to the number of selected variables, that was equal to",m,"\n")
 	q <- m
   }
 
-  u  <- apply(x,2,mean)
-  uk <- apply(x,2,grpmeans,grp=grp)
+  u  <- apply(data,2,mean)
+  uk <- apply(data,2,grpmeans,grp=grp)
   Xw <- matrix(0.,n,m)
   Xdelta <- matrix(0.,k-1,m)
   Xavg <- matrix(0.,k-1,m)
@@ -111,16 +111,16 @@ RFqlda <- function(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
 	Xdelta[i-1,] <- uk[i,] - uk[1,]
 	Xavg[i-1,] <- (uk[i,]+uk[1,])/2
   }
-  for (i in 1:k)  Xw[grp==levels(grp)[i],] <- x[grp==levels(grp)[i],] - matrix(rep(uk[i,],nk[i]),nk[i],m,byrow=TRUE)
+  for (i in 1:k)  Xw[grp==levels(grp)[i],] <- data[grp==levels(grp)[i],] - matrix(rep(uk[i,],nk[i]),nk[i],m,byrow=TRUE)
 
 #  Compute the matrices Sig and SigFq of total and Factor-q approximation within variances and covariances
 
    if (m <= maxcol)  {
 	Sig <- t(Xw) %*% Xw / (n - k)
-	SigFq <- ForbSigap(Sig,q,nstarts)
+	SigFq <- FrobSigAp(Sig,q,nstarts)
    }
    else  {
-	SigFq <- ForbSigap1(Xw/sqrt(n-k),min(n,m),q,nstarts)
+	SigFq <- FrobSigAp1(Xw/sqrt(n-k),min(n,m),q,nstarts)
   }
 
 #  Compute the coefficients of the linear discriminant rule and return the results
@@ -137,6 +137,8 @@ RFqlda <- function(x,grouping,q,prior,CorrAp,VSelfunct,maxcol,nstarts,...)
    class(result) <- "RFlda"
    result    # return(result)
 }
+
+is.RFlda <- function(x)  inherits(x,"RFlda")
 
 predict.RFlda <- function(object,newdata,prior=object$prior,grpcodes=NULL,...)
 {

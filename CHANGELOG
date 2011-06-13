@@ -1,0 +1,26 @@
+
+########## Version 0.1.1 (June 2011) ###################
+
+The following changes were made in Version 0.1.1 of R package HiDimDA:
+
+1) A bug was corrected in the print method for class SigFqInv: in
+   version 0.1.0 the print.SigFqInv method assumed incorrectly that 
+   the 'x' argument was an object describing a covariance and not 
+   a precision matrix. 
+
+2) The names of functions ForbSigap and ForbSigap1 (approximation of
+   covariance matrices by minimization of error Frobenius norms) were
+   changed to FrobSigAp and FrobSigAp1, and additional arguments were introduced,
+   given the user more control of optimization procedure. 
+   Alias to the previous names were created in order to maintain backward compability.
+   A bug was corrected in the function FrobSigAp1: this version of the approximation 
+   function that takes as input the matrix square root of the covariance to be 
+   approximated (instead of the covariance itself, as function FrobSigAp does), 
+   was not working properly in version 0.1.0.
+
+3) The method RFlda for data frames and the methods LeftMult and
+   RightMult for classes SigFq and SigFqInv (specialized matrix products
+   for objects of classes SigFq and SigFqInv), that previously were internal
+   to the package, are exported in version 0.1.1.
+
+4) The help files were improved and updated.

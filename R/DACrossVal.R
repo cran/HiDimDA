@@ -1,4 +1,4 @@
-### DACrossVal.R  (2011-04-20)
+### DACrossVal.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,7 +19,7 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-DACrossVal <- function(x,grouping,TrainAlg,EvalAlg=EvalClrule,Strfolds=TRUE,kfold=10,CVrep=20,prior="proportions",...)
+DACrossVal <- function(data,grouping,TrainAlg,EvalAlg=EvalClrule,Strfolds=TRUE,kfold=10,CVrep=20,prior="proportions",...)
 {
   fold <- function(n,kfold,fi) return((round((fi-1)*n/kfold)+1):round(fi*n/kfold))
 
@@ -43,8 +43,8 @@ DACrossVal <- function(x,grouping,TrainAlg,EvalAlg=EvalClrule,Strfolds=TRUE,kfol
 			for (grp in 2:k) out <- c(out,which(grouping==codes[grp])[permut[[grp]]][fold(nk[grp],kfold,j)])
 		}
 		else out <- permut[fold(n,kfold,j)]
-		tres <- TrainAlg(x[-out,],grouping[-out],k=k,grpcodes=codes,prior=prior,...)
-		EvalRes[(i-1)*kfold+j,,] <- EvalAlg(tres,x[out,],grouping[out],k=k,grpcodes=codes)
+		tres <- TrainAlg(data[-out,],grouping[-out],k=k,grpcodes=codes,prior=prior,...)
+		EvalRes[(i-1)*kfold+j,,] <- EvalAlg(tres,data[out,],grouping[out],k=k,grpcodes=codes)
 	}
   }
   EvalRes  # return(EvalRes)

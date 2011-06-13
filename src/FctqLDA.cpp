@@ -170,7 +170,7 @@ double FnDist1(double *B,int p,int q,double *SigmSr,int Srank,vector<int>& ind,d
 		if (j<i) halfsqdist += dist*dist;
 		else viol += dmax(k0-dist,0.);
 	}
-    return(2*halfsqdist + penF*viol*viol);
+    	return(2*halfsqdist + penF*viol*viol);
 } 
 
 int fgrad1(double *B,vector<double>& Bij,vector<int>& iviol,vector<double>& fg,int p,int q,double *SigmSr,int Srank,vector<int>& ind,double k0,double penF)

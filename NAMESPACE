@@ -1,6 +1,6 @@
 useDynLib(HiDimDA)
-export(RFlda, RFlda.data.frame, predict.RFlda, SelectV, DACrossVal, ForbSigap, ForbSigap1, RepLOptim)
 exportClasses(RFlda, SigFq, SigFqInv)
-exportPattern("*.RFlda","*.SigFq","*.SigFqInv")
-exportMethods(LeftMult,RightMult)
+exportMethods(RFlda, LeftMult, RightMult)
+exportPattern("RFlda.*", "*.RFlda", "*.SigFq", "*.SigFqInv", "LeftMult.*", "RightMult.*")
+export(SelectV, DACrossVal, FrobSigAp, FrobSigAp1, ForbSigap, ForbSigap1)
 

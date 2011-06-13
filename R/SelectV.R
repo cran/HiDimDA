@@ -1,4 +1,4 @@
-### SelectV.R  (2011-04-25)
+### SelectV.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,26 +19,26 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-SelectV <- function(x,grouping,Selmethod=c("ExtHC","HC","Fdr","fixedp"),
-NullDist=c("locfdr","Theoretical"),uselocfdr=c("onlyHC","always"),minlocfdrp=200,comvar=TRUE,alpha=0.1,alpha0=0.1,maxp=ncol(x),tol=1E-12,...)
+SelectV <- function(data,grouping,Selmethod=c("ExtHC","HC","Fdr","fixedp"),
+NullDist=c("locfdr","Theoretical"),uselocfdr=c("onlyHC","always"),minlocfdrp=200,comvar=TRUE,alpha=0.1,alpha0=0.1,maxp=ncol(data),tol=1E-12,...)
 {
    Selmethod <- match.arg(Selmethod)
    NullDist <-match.arg(NullDist)
    uselocfdr <- match.arg(uselocfdr)
    if (NullDist != "locfdr" && uselocfdr == "always") stop("Error: uselocfdr argument can only be used when NullDist is set to locfdr")
 
-   p <- ncol(x)
+   p <- ncol(data)
    if (p < minlocfdrp) NullDist <- "Theoretical"
    nk <- table(grouping)
    k <- nrow(nk)
    nk <- as.vector(nk)
    n <- sum(nk)
    if (k==2) {
-	tscr <- tscores(x,grouping,n,nk,comvar=comvar)
+	tscr <- tscores(data,grouping,n,nk,comvar=comvar)
 	scores <- abs(tscr$st)
    }
    else {
-	fscr <- fscores(x,grouping,n,nk,k)
+	fscr <- fscores(data,grouping,n,nk,k)
 	scores <- fscr$st
    }
    if (Selmethod=="fixedp")  {
@@ -109,7 +109,7 @@ HC <- function(p,pvalues,HCplus=FALSE,minvkpt=1,alpha0=0.1)
 #        nkptvar     - the number of variables to be kept in the analysis 
 
         sortedpv <- sort(pvalues,index.return=TRUE)
-        if (HCplus) p0 <- max(minvkpt,length(sortedpv$x[sortedpv$x<=1/p])+1)
+        if (HCplus) p0 <- max(minvkpt,length(sortedpv$x[sortedpv$data0<=1/p])+1)
         else p0 <- minvkpt
         p1 <- floor(alpha0*p)
 	if (p0 >= p1) nkptvar <- p0
@@ -124,12 +124,12 @@ HC <- function(p,pvalues,HCplus=FALSE,minvkpt=1,alpha0=0.1)
         list(threshold=sortedpv$x[nkptvar],varkept=XPind,nkptvar=nkptvar) # return(list(threshold=sortedpv$x[nkptvar],varkept=XPind,nkptvar=nkptvar))
 }
 
-tscores <- function(x,grouping,n,nk,comvar)
+tscores <- function(data,grouping,n,nk,comvar)
 {
   # Computes two-group t-scores
 
-  Xbark <- apply(x,2,grpmeans,grp=grouping)
-  vark <- apply(x,2,grpvar,grp=grouping)
+  Xbark <- apply(data,2,grpmeans,grp=grouping)
+  vark <- apply(data,2,grpvar,grp=grouping)
   if (comvar==TRUE) {
 	df <- n-2
 	denom <- sqrt( (1/nk[1]+1/nk[2]) * ((nk[1]-1)*vark[1,]+(nk[2]-1)*vark[2,]) / df )
@@ -144,14 +144,14 @@ tscores <- function(x,grouping,n,nk,comvar)
    list(st=(Xbark[1,]-Xbark[2,])/denom,df=df)  #  return( list(st=(Xbark[1,]-Xbark[2,])/denom,df=df) )
 }
 
-fscores <- function(x,grouping,n,nk,k)
+fscores <- function(data,grouping,n,nk,k)
 {
   # Computes ANOVA f-scores
 
   df <- n - k
-  vark <- apply(x,2,grpvar,grp=grouping)
+  vark <- apply(data,2,grpvar,grp=grouping)
   W <- apply((nk-1)*vark,2,sum)
-  B <- (n-1)*apply(x,2,var) - W
+  B <- (n-1)*apply(data,2,var) - W
   list(st=(B/(k-1))/(W/df),df=df)   # return(list(st=(B/(k-1))/(W/df),df=df))
 }
 

@@ -1,4 +1,4 @@
-### RepLOptim.R  (2011-04-20)
+### RepLOptim.R  (2011-06-11)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,8 +19,8 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-RepLOptim <- function(parmean,parsd,fr,nrep,niter,gr=NULL,inphess=NULL,method="nlminb",lower=NULL,upper=NULL,rethess=FALSE,
-allrep=NULL,neval=NULL,objbnd=Inf,parmstder=FALSE,tol=1E-8,...) 
+RepLOptim <- function(parmean,parsd,fr,nrep,niter,atol=0.,rtol=sqrt(.Machine$double.eps),gr=NULL,inphess=NULL,method="nlminb",
+lower=NULL,upper=NULL,rethess=FALSE,allrep=NULL,neval=NULL,objbnd=Inf,parmstder=FALSE,tol=1E-8,...) 
 
 #   RepLOptim -- Repeated local optimization 
 
@@ -41,6 +41,10 @@ allrep=NULL,neval=NULL,objbnd=Inf,parmstder=FALSE,tol=1E-8,...)
 #   nrep    --   number of replications (different calls to the local optimizer leading to valid solutions) 
 #                to be performed
 #   niter   --   maximum number of iterations performed in each call to the local optimizer.
+#   atol    --   The absolute convergence tolerance of the local optimizer. Only useful for non-negative functions, 
+#                as a tolerance for reaching zero. Ignored when method is set to "nlm".
+#   rtol    --   The relative convergence tolerance of the local optimizer.  The local optimizer stops if it is unable 
+#                to reduce the value by a factor of ‘reltol *(abs(val) + reltol)’ at a step. Ignored when method is set to "nlm".
 #   gr      --   A function to return the gradient for the "nlminb", "BFGS", '"CG"'and '"L-BFGS-B"' methods.  
 #                If it is 'NULL', a finite-difference approximation will be used. For the '"SANN"' method 
 #                it specifies a function to generate a new candidate point.  If it is 'NULL' a default Gaussian
@@ -112,13 +116,14 @@ allrep=NULL,neval=NULL,objbnd=Inf,parmstder=FALSE,tol=1E-8,...)
        while (value >= objbnd && cnt < allrep)
       {
        	 if (method == "nlminb")
-	    tmpres <- nlminb(start=initpar,fr,gradient=gr,hessian=inphess,lower=lower,upper=upper,control=list(iter.max=niter,eval.max=neval),...)
+	    tmpres <- nlminb(start=initpar,fr,gradient=gr,hessian=inphess,lower=lower,upper=upper,
+				control=list(iter.max=niter,eval.max=neval,abs.tol=atol,rel.tol=rtol),...)
        	 else if (method == "nlm") 
 	    tmpres <- nlm(fr,p=initpar,lbound=lower,ubound=upper,iterlim=niter,...)
        	 else if (method == "L-BFGS-B")
-	    tmpres <- optim(initpar,fr,gr=gr,method=method,lower=lower,upper=upper,control=list(maxit=niter),hessian=rethess,...)
+	    tmpres <- optim(initpar,fr,gr=gr,method=method,lower=lower,upper=upper,control=list(maxit=niter,abstol=atol,reltol=rtol),hessian=rethess,...)
        	 else  tmpres <-
-            optim(initpar,fr,gr=gr,method=method,control=list(maxit=niter),lbound=lower,ubound=upper,hessian=rethess,...)
+            optim(initpar,fr,gr=gr,method=method,control=list(maxit=niter,abstol=atol,reltol=rtol),lbound=lower,ubound=upper,hessian=rethess,...)
        	 if (method == "nlminb") value <- tmpres$objective
        	 else if (method == "nlm") value <- tmpres$minimum
        	 else value<- tmpres$value

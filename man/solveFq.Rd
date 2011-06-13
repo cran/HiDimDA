@@ -27,5 +27,5 @@ and solve will return an object representing the inverse of the matrix associate
 \details{The result returned depends on the values of the arguments. When \sQuote{b} is not NULL, both functions return a numeric vector or matrix with
 the solution of the system. When \sQuote{b} is NULL, \sQuote{solve.SigFq} returns a \sQuote{SigFqInv} object and \sQuote{solve.SigFqInv} returns a \sQuote{SigFq} object.}  
 
-\seealso{\code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{ForbSigap}}, \code{\link{solve}}}
+\seealso{\code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{FrobSigAp}}, \code{\link{solve}}}
 

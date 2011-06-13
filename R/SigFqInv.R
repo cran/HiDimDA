@@ -1,4 +1,4 @@
-### SigFqInv.R  (2011-04-25)
+### SigFqInv.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -19,12 +19,7 @@
 ### Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
 ### MA 02111-1307, USA
 
-SigFqInv <- function(D,B,p,q) 
-{
-   result <- list(p=p,q=q,B=B,D=D,res=NULL,call=NULL)
-   class(result) <- "SigFqInv"
-   result  #  return(result) 
-}
+SigFqInv <- function(D,B,p,q,optres=NULL) solve(SigFq(D,B,p,q,optres))
 
 is.SigFqInv <- function(x)  inherits(x,"SigFqInv")
 
@@ -32,16 +27,10 @@ as.matrix.SigFqInv <- function(x,...)  diag(x$D)-x$B%*%t(x$B)
 
 print.SigFqInv <- function(x,...)
 {
-	cat("Call:\n") ; print(x$call)  
-        if (is.null(x$B))  {
-	   cat("Minimization of approximation error failed.\nResults of the optimization routine:\n")
-           print(x$res)
-        }
-	else {
-		cat("\nDimensionality of the assumed Factor model: ",x$q,"\n") 
-		cat("\nLoadings Matrix:\n") ; print(x$B)
-		cat("\nSpecific Variances:\n",x$D,"\n")
-	} 
+	xi <- solve(x)
+	cat(paste("Precision matrix for a ",x$q,"-factor model\n",sep=""))
+	cat("\nLoadings:\n") ; print(xi$B)
+	cat("\nSpecific Variances:\n",xi$D,"\n")
 }
 
 "+.SigFqInv" <- function(x,a)
@@ -78,7 +67,7 @@ print.SigFqInv <- function(x,...)
    if (is.SigFq(a)) return( (diag(x$D)-x$B%*%t(x$B))*(diag(a$D)+a$B%*%t(a$B)) )
    if (is.SigFqInv(a)) return( (diag(x$D)-x$B%*%t(x$B))*(diag(a$D)-a$B%*%t(a$B)) )
    if (length(a)>1) return( (diag(x$D)-x$B%*%t(x$B))*a )
-   result <- list(p=x$p,q=x$q,B=sqrt(a)*x$B,D=a*x$D,res=NULL,call=NULL)
+   result <- list(p=x$p,q=x$q,B=sqrt(a)*x$B,D=a*x$D,optres=NULL)
    class(result) <- "SigFqInv"
    result  # return(result) 
 }
@@ -93,7 +82,7 @@ print.SigFqInv <- function(x,...)
    if (is.SigFq(a)) return( (diag(x$D)-x$B%*%t(x$B))/(diag(a$D)+a$B%*%t(a$B)) )
    if (is.SigFqInv(a)) return( (diag(x$D)-x$B%*%t(x$B))/(diag(a$D)-a$B%*%t(a$B)) )
    if (length(a)>1) return( (diag(x$D)-x$B%*%t(x$B))/a )
-   result <- list(p=x$p,q=x$q,B=x$B/sqrt(a),D=x$D/a,res=NULL,call=NULL)
+   result <- list(p=x$p,q=x$q,B=x$B/sqrt(a),D=x$D/a,optres=NULL)
    class(result) <- "SigFqInv"
    result  # return(result) 
 }
