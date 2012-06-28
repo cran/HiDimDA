@@ -32,7 +32,7 @@ FrobSigAp1 <- function(SigmaSr,SigmaRank,q,nstarts=1,k0=NULL,penF=NULL,atol=1E-2
    np <- q*(q+1)/2+(p-q)*q
    pu <- array(dim=np)
 
-   SigSrSVD <- svd(SigmaSr)
+   SigSrSVD <- rghtsngv(SigmaSr)
    cnt <- 0
    for (a in 1:q) {
 	pu[(cnt+1):(cnt+p-a+1)] <- SigSrSVD$d[a]*SigSrSVD$v[a:p,a]

@@ -157,7 +157,7 @@ lower=NULL,upper=NULL,rethess=FALSE,allrep=NULL,neval=NULL,objbnd=Inf,parmstder=
     	counts <- bestres$counts
         if (rethess==TRUE) {
            hess <- bestres$hessian
-           egval <- eigen(hess,sym=TRUE,only.values=TRUE)$values
+           egval <- eigen(hess,symmetric=TRUE,only.values=TRUE)$values
        	   if (parmstder==TRUE)
               if (egval[npar] < tol) parstd <- "Not computed because the hessian is not positive definite"
               else parstd <- sqrt(diag(solve(hess)))

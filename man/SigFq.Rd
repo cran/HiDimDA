@@ -4,6 +4,11 @@
 \alias{is.SigFq}
 \alias{as.matrix.SigFq}
 \alias{print.SigFq}
+\alias{+.SigFq}
+\alias{-.SigFq}
+\alias{*.SigFq}
+\alias{/.SigFq}
+
 
 \title{SigFq objects: covariance matrices associated with a q-factor model}
 

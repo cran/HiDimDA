@@ -11,12 +11,9 @@
  \sQuote{FrobSigAp1} finds the parameters of a q-factor model whose covariance is closest to the matrix square \code{SigmaSr \%*\% t(SigmaSr)} of the argument \sQuote{SigmaSr}, according to the Frobenius norm. 
 }
 
-\details{The minimization of the error Frobenius norm is performed by the \sQuote{nlminb} PORT optimization routine. The actual computations of
-the errors, and their analytical gradients and hessians, are coded in C in order to speed up the algorithm.\cr The minimization procedure takes the loadings (B) of the factor model as arguments (on optimality, the specific variances (D) are always given by \code{D = diag(Sigma) - diag(B \%*\% t(B))},
-and uses the first q eigenvectors of \sQuote{Sigma} as starting points of the optimization.\cr
+\details{The minimization of the error Frobenius norm is performed by the \sQuote{nlminb} PORT optimization routine. The actual computations of the errors, and their analytical gradients and hessians, are coded in C in order to speed up the algorithm.\cr The minimization procedure takes the loadings (B) of the factor model as arguments, computes the optimal specific variances by the analytical formula \code{D = diag(Sigma) - diag(B \%*\% t(B))}, and uses the first q eigenvectors of \sQuote{Sigma} as starting points of the optimization.\cr
 For small values of q (1 or 2), this procedure seems to quickly converge to the global minimum of the approximation error. 
-For larger values of q, the computational time can be much higher and multiple random starting points (use the argument \sQuote{nstarts}) may be required 
-in order to escape local optima.
+For larger values of q, the computational time can be much higher and multiple random starting points (that can be specified by the argument \sQuote{nstarts}) may be required in order to escape local optima.
 }
 
 \usage{
@@ -38,7 +35,7 @@ atol = 1e-20, rtol = 100 * sqrt(.Machine$double.eps))
 
   \item{k0}{Lower bound for the elements of the specific variances. When NULL (default), k0 is set to 0.01 times the minimum diagonal element of \sQuote{Sigma}.}
 
-  \item{penF}{Penalty factor, used to forbid specific variances below the k0 bound. When NULL (default), is set to 100 times the maximum diagonal element of \sQuote{Sigma}.}
+  \item{penF}{Penalty factor, used to forbid specific variances below the k0 bound. When set to NULL (default), a penalty equal to 100 times the maximum diagonal element of \sQuote{Sigma} is used.}
 
   \item{atol}{The absolute convergence tolerance of the local optimizer.}
 
@@ -52,8 +49,8 @@ atol = 1e-20, rtol = 100 * sqrt(.Machine$double.eps))
 \value{ An object of class \sQuote{SigFq} representing the covariance assumed by the closest q-factor model.
 \sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 
-\references{Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
-\emph{Computational Statistics and Data Analysis}, doi:10.1016/j.csda.2011.05.002.}
+\references{Pedro Duarte Silva, A. (2006) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
+\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.}
 
 \author{A. Pedro Duarte Silva}
 

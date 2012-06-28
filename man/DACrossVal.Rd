@@ -1,11 +1,11 @@
 \name{DACrossVal}
 
-\title{Cross Validation for Discriminant Analysis Classification Rules}
+\title{Cross Validation for Discriminant Analysis Classification Algorithms}
 
 \alias{DACrossVal}
 
 \description{
-\sQuote{DACrossVal} evaluates the performance of a Discriminant Analysis training sample algorithm by kfold 
+\sQuote{DACrossVal} evaluates the performance of a Discriminant Analysis training algorithm by kfold 
 Cross-Validation.  
 }
 
@@ -35,14 +35,14 @@ proportions (default), or randomly generated from the whole training sample, ign
   \item{\dots}{Further arguments to be passed to \sQuote{TrainAlg} and \sQuote{EvalAlg}.} 
 }
 
-\value{A three dimensional array with the number of tested observations, and estimated classification errors for each combination of fold and replication tried. The array dimensions are defined as follows:\cr
-The first dimension runs through the different fold-replication combinations.\cr
-The second dimension represents the classes. \cr
-The third dimension has two named levels representing respectively the number of observations tested (\dQuote{Nk}), and the estimated classification errors (\dQuote{Clerr}).}
+\value{A three dimensional array with the number of holdout observations, and estimated classification errors for each combination of fold and replication tried. The array dimensions are defined as follows:\cr \cr
+The first dimension runs through the different fold-replication combinations.\cr \cr
+The second dimension represents the classes. \cr \cr
+The third dimension has two named levels representing respectively the number of holdout observations (\dQuote{Nk}), and the estimated classification errors (\dQuote{Clerr}).}
 
 \author{A. Pedro Duarte Silva}
 
-\seealso{\code{\link{lda}}, \code{\link{RFlda}}, \code{\link{predict.lda}}, \code{\link{predict.RFlda}}}
+\seealso{\code{\link{lda}}, \code{\link{RFlda}}, \code{\link{predict.lda}}, \code{\link{predict.canldaRes}}, \code{\link{predict.clldaRes}}}
 
 \examples{
 
@@ -54,12 +54,12 @@ library(MASS)
 CrosValRes1 <- DACrossVal(iris[1:4],iris$Species,TrainAlg=lda,CVrep=3)
 summary(CrosValRes1[,,"Clerr"])
 
-# Evaluate the performance on Alon's Colon Cancer Data set, of a 
-# one-factor linear discriminant rule after variable selection 
-# by the Extended HC scheme, by five-fold cross-validation.
+# Evaluate the performance on Alon's Colon Cancer Data set (with a logarithmic
+# transformation), of a one-factor linear discriminant rule with the best
+# fifty genes, by four-fold cross-validation.
 
-CrosValRes2 <- DACrossVal(AlonDS[,-1],AlonDS[,1],TrainAlg=RFlda,
-kfold=5,CVrep=1)
+CrosValRes2 <- DACrossVal(log10(AlonDS[,-1]),AlonDS$grouping,TrainAlg=RFlda,
+ldafun="classification",Selmethod="fixedp",maxp=50,kfold=4,CVrep=1)
 summary(CrosValRes2[,,"Clerr"])
 
 }

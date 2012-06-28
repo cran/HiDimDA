@@ -1,4 +1,4 @@
-# Modified version of the locfdr function from the locfrd package that returns with an error code instead of stoping when the estimation fails. 
+# Modified version of the locfdr function from the locfrd package that deactivates warning messages and returns with an error code instead of stoping when the estimation fails. 
 # Other than that, this function is identical to the original locfdr as written by Bradley Efron, Brit B. Turnbull, and Balasubramanian Narasimhan.
 
 mylocfdr <-
@@ -58,9 +58,9 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 	Fr <- cumsum(rev(f))
 	D <- (y - f)/(f + 1)^0.5
 	D <- sum(D[2:(K - 1)]^2)/(K - 2 - df)
-	if(D > 1.5)
-          warning(paste("f(z) misfit = ", round(
-			D, 1), ".  Rerun with increased df", sep=""))
+	# if(D > 1.5)
+          # warning(paste("f(z) misfit = ", round(
+	  #		D, 1), ".  Rerun with increased df", sep=""))
         # ............. create fp0 matrix ..........................
         if (nulltype == 3) {
                 fp0 = matrix(NA, 6, 4)
@@ -101,26 +101,23 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 	co <- lr$coef
         ## Error messages for failed CM estimation ##
         if (nulltype == 3) {
-          cmerror = I(is.na(co[3]) | is.na(co[2]))
+          cmerror = I(!is.finite(co[3]) | !is.finite(co[2]))
           if (!cmerror) cmerror = I(co[2] >= 0 | co[2]+co[3]>=0)
         }
         else {
-          cmerror = is.na(co[3])
+          cmerror = !is.finite(co[3])
           if (!cmerror) cmerror = I(co[3] >= 0)
         }
         if (cmerror) {
-          if (nulltype == 3)
+#          if (nulltype == 3)
 #            stop("CM estimation failed.  Rerun with nulltype = 1 or 2.")			# Code modification  !!
+#          else
+#            if (nulltype == 2)
+#            stop("CM estimation failed.  Rerun with nulltype = 1.")				# Code modification  !!
+          if (nulltype == 2 || nulltype == 3)
 	  {											# Code modification  !!
 		otp <- list(errmsg="mylocfdr: CM estimation failed.  Rerun with nulltype = 1") 	# Code modification  !!
 		class(otp) <-"error3" 								# Code modification  !! 
-	  }											# Code modification  !!
-          else
-            if (nulltype == 2)
-#            stop("CM estimation failed.  Rerun with nulltype = 1.")				# Code modification  !!
-	  {											# Code modification  !! 
-		otp <- list(errmsg="mylocfdr: CM estimation failed.  Rerun with nulltype = 1")	# Code modification  !!
-		class(otp) <- "error3"								# Code modification  !!
 	  }											# Code modification  !!
           else {
             X0 <- cbind(1, x - xmax, (x - xmax)^2)
@@ -156,41 +153,50 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 #         mlests = locmle(zz, xlim=c(med, b*sc))				# Code modification  !!
           mlests <- mylocmle(zz, xlim=c(med, b*sc))				# Code modification  !!
           if (N>500000) {
-            warning("length(zz) > 500,000: For ML estimation, a wider interval than optimal was used.  To use the optimal interval, rerun with mlests = c(", mlests[1], ", ", b * mlests[2], ").\n", sep="")
+            #warning("length(zz) > 500,000: For ML estimation, a wider interval than optimal was used.  To use the optimal interval, rerun with mlests = c(", mlests[1], ", ", b * mlests[2], ").\n", sep="")
 #           mlests = locmle(zz, xlim=c(med, sc))			# Code modification  !!
             mlests <- mylocmle(zz, xlim=c(med, sc))			# Code modification  !!
           }
         }
-	if (!is.na(mlests[1])) {
+	if (is.finite(mlests[1])) {
           if (N>500000) b = 1
           if (nulltype == 1) {
               Cov.in = list(x=x, X=X, f=f, sw=sw)
 #             ml.out = locmle(zz, xlim = c(mlests[1], b * mlests[2]),		# Code modification  !!
               ml.out <- mylocmle(zz, xlim = c(mlests[1], b * mlests[2]),	# Code modification  !!
-                d=mlests[1], s=mlests[2], Cov.in=Cov.in)
-              mlests = ml.out$mle
+                  d=mlests[1], s=mlests[2], Cov.in=Cov.in)
+#             mlests = ml.out$mle
+  	      if (!is.list(ml.out))  {
+	     	otp <- list(errmsg="mylocfdr: ML estimation failed.  Rerun with nulltype=2")			# Code modification  !!
+	     	if (!silently) warning(otp$errmsg)								# Code modification  !!
+	     	class(otp) <- "error1"										# Code modification  !!
+	    	return(otp)											# Code modification  !!
+	      }													# Code modification  !!
+              else mlests = ml.out$mle										# Code modification  !!
             }
 #            else  mlests = locmle(zz, xlim = c(mlests[1], b * mlests[2]),	# Code modification  !!
             else  mlests <- mylocmle(zz, xlim = c(mlests[1], b * mlests[2]),	# Code modification  !!
                 d=mlests[1], s=mlests[2])
-            fp0["mlest", 1:3] = mlests[1:3]
-            fp0["mleSD", 1:3] = mlests[4:6]
+	    if (!is.na(mlests[1])) {						# Code modification  !!
+            	fp0["mlest", 1:3] = mlests[1:3]
+            	fp0["mleSD", 1:3] = mlests[4:6]
+	    }									# Code modification  !!
         }
-        if (sum(is.na(fp0[c(3,5),1:2])) == 0 & nulltype > 1)
-          if(abs(fp0["cmest",1] - mlests[1]) > 0.050000000000000003 |
-             abs(log(fp0["cmest",2]/mlests[2])) > 0.050000000000000003)
-		warning("Discrepancy between central matching and maximum likelihood estimates.\nConsider rerunning with nulltype = 1")
+        # if (sum(is.na(fp0[c(3,5),1:2])) == 0 & nulltype > 1)
+          # if(abs(fp0["cmest",1] - mlests[1]) > 0.050000000000000003 |
+             # abs(log(fp0["cmest",2]/mlests[2])) > 0.050000000000000003)
+		#warning("Discrepancy between central matching and maximum likelihood estimates.\nConsider rerunning with nulltype = 1")
         ## Error messages for failed ML estimation ##
-        if (is.na(mlests[1])) {
+        if (!is.finite(mlests[1])) {
           if (nulltype == 1) {  
-            if (is.na(fp0["cmest", 1]))
+            if (!is.finite(fp0["cmest", 1]))
 #               stop("CM and ML Estimation failed, middle of histogram non-normal")
 #               else stop("ML estimation failed.  Rerun with nulltype=2")
 		otp <- list(errmsg="mylocfdr: CM and ML Estimation failed, middle of histogram non-normal")	# Code modification  !!
-		else otp <- list(errmsg="mylocfdr: ML estimation failed.  Rerun with nulltype=2")		# Code modification  !!
-		if (!silently) warning(otp$errmsg)								# Code modification  !!
-		class(otp) <- "error1"										# Code modification  !!
-		return(otp)
+	     else otp <- list(errmsg="mylocfdr: ML estimation failed.  Rerun with nulltype=2")			# Code modification  !!
+	     if (!silently) warning(otp$errmsg)									# Code modification  !!
+	     class(otp) <- "error1"										# Code modification  !!
+	    return(otp)
           }
 #         else warning("ML Estimation failed")
           else {								# Code modification  !!
@@ -200,6 +206,19 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 		return(otp)							# Code modification  !!
 	  }									# Code modification  !!
         }
+        if (mlests[3]==0)  {
+	   if (nulltype == 2 || nulltype == 3)
+	   {													# Code modification  !!
+		otp <- list(errmsg="mylocfdr: CM estimation lead to p0=0 estimate.  Rerun with nulltype = 1") 	# Code modification  !!
+		class(otp) <-"error3" 										# Code modification  !! 
+	   }													# Code modification  !!
+           else {
+	   	otp <- list(errmsg="mylocfdr: CM estimation lead to p0=0 estimate.")	# Code modification  !!
+	   	class(otp) <- "error2" 							# Code modification  !!
+           }										# Code modification  !!
+	   if (!silently) warning(otp$errmsg)						# Code modification  !!
+	  return(otp)									# Code modification  !!
+        }
 	if(nulltype < 2) {
 		delhat = xmax = xmaxx = mlests[1]
 		sighat = mlests[2]
@@ -207,7 +226,11 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 		f0 = dnorm(x, delhat, sighat)
 		f0 = (sum(f) * f0)/sum(f0)
 	}
+#cat("1 -- p0 =\n") ; print(summary(p0))
+#cat("1 -- f0 =\n") ; print(summary(f0))
+#cat("1 -- f =\n") ; print(summary(f))
         fdr = pmin((p0 * f0)/f, 1)
+#cat("1 -- fdr =\n") ; print(summary(fdr))
 	f00 <- exp( - x^2/2)
 	f00 <- (f00 * sum(f))/sum(f00)
 	p0theo <- sum(f[i0])/sum(f00[i0])
@@ -262,7 +285,7 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 	Eright0 <- sum((1 - fdr0[iup]) * fdr0[iup] * fall[iup])/sum((
 		1 - fdr0[iup]) * fall[iup])
 	Efdr <- c(Efdr, Eleft, Eright, Efdrtheo, Eleft0, Eright0)
-        Efdr[which(is.na(Efdr))] = 1
+        Efdr[which(!is.finite(Efdr))] = 1
 	names(Efdr) <- c("Efdr", "Eleft", "Eright", "Efdrtheo", "Eleft0",
 		"Eright0")
 	if(nulltype == 0)
@@ -347,11 +370,14 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
         ############## Locations of triangles ###########
         z.2 = rep(NA, 2)
         m = order(fd)[nx]
+#cat("2 -- nx =",nx,"m =",m,"fdr =\n") ; print(summary(fdr))
         if (fd[nx] < 0.2) {
+#	  if (m==nx)  m = max(which(fd>0.2))   			# Code modification  (check if correct) !!	
           z.2[2] = approx(fd[m:nx], x[m:nx], 0.20000000000000001,
                                ties=mean)$y
         }
         if (fd[1] < 0.2) {
+#	  if (m==1)  m = min(which(fd>0.2))   			# Code modification  (check if correct) !!	
           z.2[1] = approx(fd[1:m], x[1:m], 0.20000000000000001,
                               ties=mean)$y
         }
@@ -384,9 +410,9 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 		else
 			lines(x, p0*f0, lwd = 2, lty = 2, col = 4)
                 ################## Plot triangles ###############
-                if (!is.na(z.2[2]))
+                if (is.finite(z.2[2]))
 		   points(z.2[2], -0.5, pch = 24, col="red", bg="yellow")
-                if(!is.na(z.2[1]))
+                if(is.finite(z.2[1]))
 		   points(z.2[1], -0.5, pch = 24, col="red", bg="yellow")
 		if(nulltype == 1 | nulltype ==2)
 			Ef <- Efdr[1]
@@ -404,9 +430,10 @@ function(zz, bre = 120, df = 7, pct = 0, pct0 = 1/4, nulltype = 1, type = 0, plo
 			lines(c(0, 0), c(0, 1), lty = 3, col = 2)
 		}
 		if (plot == 3 | plot == 4) {
-			if(sum(is.na(cdf1[, 2])) == nrow(cdf1))
-				warning("cdf1 not available")
-			else {
+			# if(sum(is.na(cdf1[, 2])) == nrow(cdf1))
+				# warning("cdf1 not available")
+			# else {
+			if(sum(!is.finite(cdf1[, 2])) != nrow(cdf1)) {
 				plot(cdf1[, 1], cdf1[, 2], type = "l",
 					lwd = 3, xlab = "fdr level", ylim
 					 = c(0, 1), ylab = 

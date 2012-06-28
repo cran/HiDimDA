@@ -14,14 +14,6 @@
 \alias{grpvar}
 \alias{l2vnorm}
 \alias{scalebygrps}
-\alias{*.SigFq}
-\alias{/.SigFq}
-\alias{*.SigFqInv}
-\alias{/.SigFqInv}
-\alias{-.SigFq}
-\alias{-.SigFqInv}
-\alias{+.SigFq}
-\alias{+.SigFqInv}
 \alias{EvalClrule}
 \alias{mylocmle}
 \alias{mylocfdr}
@@ -31,6 +23,9 @@
 \alias{HC}
 \alias{tscores}
 \alias{fscores}
+\alias{Genlda}
+\alias{rghtsngv} 
+
 
 \title{Internal HiDimDA Functions}
 \description{

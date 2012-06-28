@@ -4,6 +4,10 @@
 \alias{is.SigFqInv}
 \alias{as.matrix.SigFqInv}
 \alias{print.SigFqInv}
+\alias{+.SigFqInv}
+\alias{-.SigFqInv}
+\alias{*.SigFqInv}
+\alias{/.SigFqInv}
 
 \title{SigFqInv objects: precision (inverse of covariance) matrices associated with a q-factor model}
 

@@ -1,4 +1,4 @@
-### Solve.R  (2011-06-13)
+### SolveRFq.R  (2011-06-13)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva

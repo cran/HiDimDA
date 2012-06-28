@@ -1,4 +1,4 @@
-### DACrossVal.R  (2011-06-13)
+### DACrossVal.R  (2012-06-25)
 ###    
 ###
 ### Copyright 2011 A. Pedro Duarte Silva
@@ -34,17 +34,23 @@ DACrossVal <- function(data,grouping,TrainAlg,EvalAlg=EvalClrule,Strfolds=TRUE,k
   n <- sum(nk)
   if (prior[1]=="proportions") prior <- nk/n
   if (Strfolds) permut <- vector("list",k)
+  out <- vector("list",kfold)
   for (i in 1:CVrep) {
 	if (Strfolds) for (grp in 1:k) permut[[grp]] <- sort.int(runif(nk[grp]),index.return=TRUE)$ix
 	else permut <- sort.int(runif(n),index.return=TRUE)$ix
 	for (j in 1:kfold)  {
   		if (Strfolds) {
-			out <- which(grouping==codes[1])[permut[[1]]][fold(nk[1],kfold,j)]
-			for (grp in 2:k) out <- c(out,which(grouping==codes[grp])[permut[[grp]]][fold(nk[grp],kfold,j)])
+			out[[j]] <- which(grouping==codes[1])[permut[[1]]][fold(nk[1],kfold,j)]
+			for (grp in 2:k) out[[j]] <- c(out[[j]],which(grouping==codes[grp])[permut[[grp]]][fold(nk[grp],kfold,j)])
 		}
-		else out <- permut[fold(n,kfold,j)]
-		tres <- TrainAlg(data[-out,],grouping[-out],k=k,grpcodes=codes,prior=prior,...)
-		EvalRes[(i-1)*kfold+j,,] <- EvalAlg(tres,data[out,],grouping[out],k=k,grpcodes=codes)
+		else out[[j]] <- permut[fold(n,kfold,j)]
+		if (!all(is.finite(out[[j]]))) 
+			stop(paste("DACrossVal is not able to create",kfold,"folds, for group sizes equal to:\n",
+				paste(nk,collapse=" ")))
+	}
+	for (j in 1:kfold)  {
+		tres <- TrainAlg(data[-out[[j]],],grouping[-out[[j]]],k=k,grpcodes=codes,prior=prior,...)
+		EvalRes[(i-1)*kfold+j,,] <- EvalAlg(tres,data[out[[j]],],grouping[out[[j]]],k=k,grpcodes=codes)	
 	}
   }
   EvalRes  # return(EvalRes)

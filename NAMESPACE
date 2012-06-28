@@ -1,6 +1,8 @@
 useDynLib(HiDimDA)
-exportClasses(RFlda, SigFq, SigFqInv)
-exportMethods(RFlda, LeftMult, RightMult)
-exportPattern("RFlda.*", "*.RFlda", "*.SigFq", "*.SigFqInv", "LeftMult.*", "RightMult.*")
-export(SelectV, DACrossVal, FrobSigAp, FrobSigAp1, ForbSigap, ForbSigap1)
+exportClasses(Dlda, Mlda, Slda, RFlda, DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, ldaRes)
+exportMethods(Dlda, Mlda, Slda, RFlda, LeftMult, RightMult, CovE, ICovE)
+export(DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, MldaInvE, ShrnkSigE, SelectV, DACrossVal, FrobSigAp, FrobSigAp1, ForbSigap, ForbSigap1)
+exportPattern("Dlda.*", "Mlda.*", "Slda.*", "RFlda.*", "LeftMult.*", "RightMult.*", "CovE.*", "ICovE.*", 
+"*.canldaRes", "*.clldaRes", "*.ScanldaRes", "*.SclldaRes", "*.RFcanldaRes", "*.RFclldaRes",  
+"*.Dlda", "*.RFlda", "*.DMat", "*.ShrnkMat", "*.ShrnkMatInv", "*.SigFq", "*.SigFqInv")
 

@@ -1,7 +1,37 @@
+########## Version 0.2-0 (June 2012) ###################
 
-########## Version 0.1.1 (June 2011) ###################
 
-The following changes were made in Version 0.1.1 of R package HiDimDA:
+The following major changes were made in Version 0.2-0 of R package HiDimDA:
+
+1) In adition to the original RFlda (linear discriminant analysis based
+   on a factor-model estimator of the correlation matrix), three new 
+   classifiers were included in the package:
+   (i) Dlda which peforms Diagonal linear discriminant analysis.
+   (ii) Slda which performs Shrunken linear discriminant analysis 
+    using the shrunken covariance estimators of Ledoit-Wolf/Fisher-Sun.
+   (iii) Mlda which performs Maximum uncertainty linear discriminant 
+    analysis as proposed by Thomaz, Kitani and Gillies.
+
+2)  RFlda and the three new (Dlda, Slda and Mlda) discrimination routines,
+    now return by default canonical discriminant functions, while 
+    direct-classification functions (the main output of RFlda in version 0.1-1
+    are returned only the the argument ldafun is set to "classification"
+
+3)  Two S3 classes named canldaRes and clldaRes (both a predict method) were created 
+    in order to store in a uniform format the results of a canonical (canldaRes)
+    or classification (canldaRes) analysis for the four classifiers now available.
+    Four extensions of these classes named RFcanlda, Scanlda, RFcllda and Scllda
+    were also created in order to add the estimated covariance and precision (in
+    appropriate objects using compact representations) matrices to the results 
+    returned by RFlda and Slda.	  
+
+4)  The examples and documentation were updated.
+
+
+
+########## Version 0.1-1 (June 2011) ###################
+
+The following changes were made in Version 0.1-0 of R package HiDimDA:
 
 1) A bug was corrected in the print method for class SigFqInv: in
    version 0.1.0 the print.SigFqInv method assumed incorrectly that 

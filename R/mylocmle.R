@@ -1,5 +1,6 @@
-# Modified version of the locmle function from the locfrd package, that makes an extra test on line 58 to ensure that bett[2] is a valid numeric number. 
-# Other than that, this file is identical to the original locfns.R file as written by Bradley Efron, Brit B. Turnbull, and Balasubramanian Narasimhan.
+# Modified version of the locmle function from the locfrd package, that makes an extra test on lines 57 and 59 to ensure that V, mu and 
+# bett[2] are composed by valid finite numbers. 
+# Other than that this file is identical to the original locfns.R file as written by Bradley Efron, Brit B. Turnbull, and Balasubramanian Narasimhan.
 
 ##
 ## We need the splines library, so we load it.
@@ -54,17 +55,23 @@ function(z, xlim , Jmle = 35, d = 0, s = 1, ep = 1/100000, sw = 0, Cov.in)
                 mu = c(E1, E2)
                 V = matrix(c(E2 - E1^2, E3 - E1 * E2, E3 - E1 * E2, E4 -
                         E2^2), 2)
-                bett = bet + solve(V, Y - mu)/(1 + 1/j^2)
-                if (is.na(bett[2])) break				# Code modification  !!
-                if(bett[2]>0)bett=bet+.1*solve(V, Y - mu)/(1 + 1/j^2)
-                if (is.na(bett[2])) break
+                if ( !all(is.finite(mu)) || !all(is.finite(V)) ) break	# Code modification  !!
+		qrV <- qr(V)						# Code modification  !!
+		if (qrV$rank!=nrow(V)) break				# Code modification  !!
+#                bett = bet + solve(V, Y - mu)/(1 + 1/j^2)
+                bett = bet + solve(qrV, Y - mu)/(1 + 1/j^2)		# Code modification  !!
+                if (!is.finite(bett[2])) break				# Code modification  !!
+#               if(bett[2]>0)bett=bet+.1*solve(V, Y - mu)/(1 + 1/j^2)
+                if(bett[2]>0)bett=bet+.1*solve(qrV, Y - mu)/(1 + 1/j^2) # Code modification  !!
+                if (!is.finite(bett[2])) break
                 else if (bett[2]>=0) break
                 d =  - bett[1]/(2 * bett[2])
                 s = 1/sqrt(-2 * bett[2])
                 if(sum((bett - bet)^2)^0.5 < ep)
                         break
         }
-        if (is.na(bett[2])) {
+#        if (is.na(bett[2])) {
+        if (!all(is.finite(mu)) || !all(is.finite(V)) || qrV$rank!=nrow(V) || !is.finite(bett[2])) {   # Code modification  !!
           mle = rep(NA, 6)
           Cov.lfdr = NA
           Cor = matrix(NA, 3, 3)
@@ -81,7 +88,8 @@ function(z, xlim , Jmle = 35, d = 0, s = 1, ep = 1/100000, sw = 0, Cov.in)
           p0 = that/H0
           ############  sd calcs ###########################
           J = s^2 * matrix(c(1, 0, 2 * d, s), 2)
-          JV = J %*% solve(V)
+#          JV = J %*% solve(V)
+          JV = J %*% solve(qrV)		# Code modification  !!
           JVJ = JV %*% t(J)
           mat2 = cbind(0, JVJ/N0)
           mat1 = c((p0 * H0 * (1 - p0 * H0))/N, 0, 0)
@@ -150,7 +158,11 @@ loccov = function(N, N0, p0, d, s, x, X, f, JV, Y, i0, H, h, sw) {
     M[,-i0] = 0
     dl0plus.dy = cbind(1 - N0/N, U %*% JV / s) %*% M /N/H[1]/p0  
     G <- t(X) %*% (f * X)
-    dl.dy = X %*% solve(G) %*% t(X)
+#    dl.dy = X %*% solve(G) %*% t(X)
+    if (!all(is.finite(G))) return(NA)		# Code modification  !!
+    qrG <- qr(G)				# Code modification  !!
+    if (qrG$rank!=nrow(G)) return(NA)	 	# Code modification  !!		
+    dl.dy = X %*% solve(qrG) %*% t(X)		# Code modification  !!
     dlfdr.dy = dl0plus.dy - dl.dy
     if (sw==3) return(dlfdr.dy)
     else {
@@ -168,16 +180,26 @@ loccov2 = function(X, X0, i0, f, ests, N) {
         Xtil <- X[i0,]
         X0til <- X0[i0,]
         G <- t(X) %*% (f * X)
+    	if (!all(is.finite(G))) return(NA)			# Code modification  !!
+    	qrG <- qr(G)						# Code modification  !!
+    	if (qrG$rank!=nrow(G)) return(NA)			# Code modification  !!
         G0 <- t(X0til) %*% X0til
-        B0 <- X0 %*% (solve(G0) %*% t(X0til)) %*% Xtil
+    	if (!all(is.finite(G0))) return(NA)			# Code modification  !!
+    	qrG0 <- qr(G0)						 # Code modification  !!
+    	if (qrG0$rank!=nrow(G0)) return(NA)			 # Code modification  !!		
+#        B0 <- X0 %*% (solve(G0) %*% t(X0til)) %*% Xtil		 
+        B0 <- X0 %*% (solve(qrG0) %*% t(X0til)) %*% Xtil	 # Code modification  !!
         C <- B0 - X
-        Ilfdr = C %*% solve(G, t(X))
-        Cov <- C %*% solve(G) %*% t(C)
+#        Ilfdr = C %*% solve(G, t(X))
+#        Cov <- C %*% solve(G) %*% t(C)
+        Ilfdr = C %*% solve(G, t(X))				# Code modification  !!
+        Cov <- C %*% solve(G) %*% t(C)				# Code modification  !!
         if (theo)
           D = matrix(1,1,1)
         else
           D = matrix(c(1, 0, 0, d, s^2, 0, s^2 + d^2, 2 * d * s^2, s^3), 3)
-	gam. = solve(G0, t(X0til)) %*% (Xtil %*% solve(G, t(X)))
+#	gam. = solve(G0, t(X0til)) %*% (Xtil %*% solve(G, t(X)))
+	gam. = solve(qrG0, t(X0til)) %*% (Xtil %*% solve(qrG, t(X)))	 # Code modification  !!
 	pds. = D %*% gam.
         if (theo) pds. = rbind(pds., matrix(0, 2, nrow(X)))
 	pds.[1,] = pds.[1,] - 1/N

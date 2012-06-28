@@ -4,21 +4,19 @@
 \alias{RFlda.default}
 \alias{RFlda.data.frame}
 \alias{is.RFlda}
-\alias{print.RFlda}
-\alias{coef.RFlda}
 
 \title{ High-Dimensional Factor-based Linear Discriminant Analysis.}
 
 \description{
- \sQuote{RFlda} finds the coefficients of a linear discriminant rule based on covariance matrix estimator
- that tries to approximate the true covariance by the closest (according to a Frobenius norm) covariance 
- compatible with a q-factor model.
+ \sQuote{RFlda} finds the coefficients of a linear discriminant rule based on a correlation (or covariance)
+ matrix estimator that tries to approximate the true correlation (covariance) by the closest (according to 
+ a Frobenius norm) correlation (covariance) compatible with a q-factor model.
 }
 
 \usage{
 
 \method{RFlda}{default}(data, grouping, q = 1, prior = "proportions", CorrAp = TRUE, 
-maxq=5, VSelfunct = SelectV, nstarts = 1, 
+maxq=5, VSelfunct = SelectV, ldafun=c("canonical","classification"), nstarts = 1, 
 CVqtrials=1:3, CVqfolds=3, CVqrep=1, CVqStrt=TRUE, \dots)
 
 \method{RFlda}{data.frame}(data, \dots)
@@ -39,7 +37,10 @@ present, the probabilities should be specified in the order of the factor levels
 
   \item{maxq}{Upper limit on the values allowed for argument \sQuote{q}.}
 
-  \item{VSelfunct}{Variable selection function. Either the string \dQuote{none} (no selection is to be performed) or a function that takes \sQuote{data} and \sQuote{grouping} as its first two arguments and returns a list with two components: (i) \sQuote{nvkpt} - the number of variables to be used in the Discriminant rule; and (ii) \sQuote{vkptInd} - the indices of the variables to be used in the Discriminant rule. The default is the \sQuote{SelectV} function that, by default, selects variables by the Extended HC scheme described in Duarte Silva (2011).} 
+  \item{VSelfunct}{Variable selection function. Either the string \dQuote{none} (no selection is to be performed) or a function that takes \sQuote{data} and \sQuote{grouping} as its first two arguments and returns a list with two components: (i) \sQuote{nvkpt} - the number of variables to be used in the Discriminant rule; and (ii) \sQuote{vkptInd} - the indices of the variables to be used in the Discriminant rule. The default is the \sQuote{SelectV} function that, by default, selects variables by the Expanded HC scheme described in Duarte Silva (2011).} 
+
+  \item{ldafun}{Type of discriminant linear functions computed. The alternatives are \dQuote{canonical} for maximum-discrimination canonical
+functions and  \dQuote{classification} for direct-classification functions.}
 
   \item{nstarts}{Number of different randomly generated starting points used in the minimization of the Frobenius norm of the correlation (or covariance) matrix approximation.}
 
@@ -54,63 +55,86 @@ present, the probabilities should be specified in the order of the factor levels
   \item{\dots}{Further arguments passed to or from other methods.}
 }
 
-\value{An object of class \sQuote{RFlda} with the following components:
+\value{
+
+If algument \sQuote{ldafun} is set to \dQuote{canonical} an object of class \sQuote{RFcanlda}, which extends class \sQuote{canldaRes}, with the following components:
 
 \item{prior}{The prior probabilities used.} 
 \item{means}{The class means.} 
-\item{coef}{A matrix with the coefficients of the k-1 discriminant rules.}
-\item{cnst}{A vector with the thresholds (2nd members of linear discriminants) used in classification rules that assume equal priors.}
-\item{vkpt}{A vector with the indices of the variables kept in the discriminant rule if total number of variables is less than \sQuote{ncol(data)}.
-NULL, otherwise.} 
-\item{nvkpt}{The number of variables kept in the discriminant rule if total number of variables is less than\sQuote{ncol(data)}. NULL, otherwise.} 
+\item{scaling}{A matrix which transforms observations to discriminant functions, normalized so that the within groups covariance matrix is spherical.}
+\item{svd}{The singular values, which give the ratio of the between- and within-group standard deviations on the linear discriminant variables.  Their squares are the canonical F-statistics.}
+\item{vkpt}{A vector with the indices of the variables kept in the discriminant rule if the number of variables kept is less than \sQuote{ncol(data)}. NULL otherwise.} 
+\item{nvkpt}{The number of variables kept in the discriminant rule if this number is less than\sQuote{ncol(data)}. NULL otherwise.} 
 \item{q}{The number of o factors used in the factor model chosen.} 
-\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix.}
-\item{SigFqInv}{An object of class \sQuote{SigFqInv} with the q-factor model approximation to the within groups precision (inverse covariance) matrix.}
+\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix.
+\sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
+\item{SigFqInv}{An object of class \sQuote{SigFqInv} with the q-factor model approximation to the within groups precision (inverse covariance) matrix. \sQuote{SigFqInv} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 \item{N}{The number of observations used.} 
 \item{call}{The (matched) function call.} 
+
+If algument \sQuote{ldafun} is set to \dQuote{classification} an object of class \sQuote{RFcllda}, which extends class \sQuote{clldaRes}, with the following components:
+
+\item{prior}{The prior probabilities used.} 
+\item{means}{The class means.} 
+\item{coef}{A matrix with the coefficients of the k-1 classification functions.}
+\item{cnst}{A vector with the thresholds (2nd members of linear classification rules) used in classification rules that assume equal priors.}
+\item{vkpt}{A vector with the indices of the variables kept in the discriminant rule if the number of variables kept is less than \sQuote{ncol(data)}. NULL otherwise.} 
+\item{nvkpt}{The number of variables kept in the discriminant rule if this number is less than\sQuote{ncol(data)}. NULL, otherwise.} 
+\item{q}{The number of o factors used in the factor model chosen.} 
+\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix.}
+\sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.
+\item{SigFqInv}{An object of class \sQuote{SigFqInv} with the q-factor model approximation to the within groups precision (inverse covariance) matrix. \sQuote{SigFqInv} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
+\item{N}{The number of observations used.} 
+\item{call}{The (matched) function call.} 
+
 }
 
-\references{Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
-\emph{Computational Statistics and Data Analysis}, doi:10.1016/j.csda.2011.05.002.}
+\references{Pedro Duarte Silva, A. (2006) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
+\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.}
 
 \author{A. Pedro Duarte Silva}
 
-\seealso{\code{\link{FrobSigAp}}, \code{\link{SelectV}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{predict.RFlda}},
+\seealso{\code{\link{FrobSigAp}}, \code{\link{SelectV}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{predict.canldaRes}}, \code{\link{predict.clldaRes}},
 \code{\link{AlonDS}}}
 
 \examples{
 
-#train classifier with 10 genes on Alon's Colon Cancer Data set. 
+#train classifier with 10 genes (after a logarithmic transformation) on Alon's Colon Cancer Data set. 
 
-ldarule1 <- RFlda(AlonDS[,-1],AlonDS[,1],Selmethod="fixedp",maxp=10)     
+log10genes <- log10(AlonDS[,-1])
+
+ldarule1 <- RFlda(log10genes,AlonDS$grouping,Selmethod="fixedp",maxp=10)     
 
 # get in-sample classification results
 
-predict(ldarule1,AlonDS[,-1],grpcodes=levels(AlonDS[,1]))$class           	       
+predict(ldarule1,log10genes,grpcodes=levels(AlonDS$grouping))$class           	       
 
 # compare classifications with true assignments
 
 cat("Original classes:\n")
-print(AlonDS[,1])             		 
+print(AlonDS$grouping)             		 
 
-# Estimate error rates by five-fold cross-validation replicated twice.
+# Estimate error rates by four-fold cross-validation.
+# (Note: In cross-validation analysis it is recommended to set the argument 
+# 'ldafun' to "classification", in order to speed up computations by avoiding 
+# unecessary eigen-decompositions) 
 
-CrosValRes1 <- DACrossVal(AlonDS[,-1],AlonDS[,1],TrainAlg=RFlda,
-Selmethod="fixedp",maxp=10,kfold=5,CVrep=2)
+CrosValRes1 <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=RFlda,
+Selmethod="fixedp",ldafun="classification",maxp=10,kfold=4,CVrep=1)
 summary(CrosValRes1[,,"Clerr"])
 
-#Find the best factor model amongst the choices q=1 or 2
+# Find the best factor model amongst the choices q=1 or 2
 
-ldarule2 <- RFlda(AlonDS[,-1],AlonDS[,1],q="CVq",CVqtrials=1:2,
-Selmethod="fixedp",maxp=10)
+ldarule2 <- RFlda(log10genes,AlonDS$grouping,q="CVq",CVqtrials=1:2,
+Selmethod="fixedp",ldafun="classification",maxp=10)
 cat("Best error rate estimate found with q =",ldarule2$q,"\n")
 
-# Find the number of selected genes by the Extended HC scheme 
+# Perform the analysis finding the number of selected genes by the Expanded HC scheme 
 
-ldarule3 <- RFlda(AlonDS[,-1],AlonDS[,1],q=ldarule2$q)     
+ldarule3 <- RFlda(log10genes,AlonDS$grouping,q=ldarule2$q)     
 cat("Number of selected genes =",ldarule3$nvkpt,"\n")
 
 # get classification results
 
-predict(ldarule3,AlonDS[,-1],grpcodes=levels(AlonDS[,1]))$class           	       
+predict(ldarule3,log10genes,grpcodes=levels(AlonDS$grouping))$class           	       
 }
