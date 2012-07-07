@@ -10,7 +10,8 @@ approach of Thomaz, Kitani and Gillies (2006).
 }
 
 \usage{  
-MldaInvE(M, check=TRUE, onlyMinv=TRUE, numtol=sqrt(Machine$double.eps))  
+MldaInvE(M, check=TRUE, onlyMinv=TRUE, 
+numtol=sqrt(.Machine$double.eps))  
 }
 
 \arguments{

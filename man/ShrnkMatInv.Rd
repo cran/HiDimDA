@@ -36,6 +36,12 @@ a p-dimensional matrix identity target will be assumed. Otherwise a matrix-type 
 
 \value{ An object of class \sQuote{ShrnkMatInv} for which the generic method \sQuote{as.matrix} (converting to a traditional numeric matrix), as well as specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations, are available.}
 
-\seealso{\code{\link{ShrnkMat}}, \code{\link{solve.ShrnkMatInv}}, \code{\link{LeftMult.ShrnkMatInv}}, \code{\link{RightMult.ShrnkMatInv}} }
+\seealso{
+
+\code{\link{ShrnkMat}}, \code{\link{solve.ShrnkMatInv}}, \code{\link{LeftMult.ShrnkMatInv}}, 
+
+\code{\link{RightMult.ShrnkMatInv}}
+
+}
 
  

@@ -34,12 +34,12 @@
 
 \arguments{
 
-  \item{object}{An object of class \sQuote{Scanlda}, \sQuote{Scllda}, \sQuote{RFcanlda} or a \sQuote{RFcllda}.}
+  \item{object}{An object of class \sQuote{Scanlda}, \sQuote{Scllda}, \sQuote{RFcanlda} or \sQuote{RFcllda}.}
 
 }
 
 \value{An object with an appropriate representation of the matrix extracted.}
 
-\seealso{\code{\link{canldaRes}}, \code{\link{clldaRes}} }
+\seealso{\code{\link{Slda}}, \code{\link{RFlda}}, \code{\link{canldaRes}}, \code{\link{clldaRes}} }
 
 

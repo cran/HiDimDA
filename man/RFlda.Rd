@@ -15,8 +15,9 @@
 
 \usage{
 
-\method{RFlda}{default}(data, grouping, q = 1, prior = "proportions", CorrAp = TRUE, 
-maxq=5, VSelfunct = SelectV, ldafun=c("canonical","classification"), nstarts = 1, 
+\method{RFlda}{default}(data, grouping, q = 1, prior = "proportions", 
+CorrAp = TRUE, maxq=5, VSelfunct = SelectV,
+ldafun=c("canonical","classification"), nstarts = 1, 
 CVqtrials=1:3, CVqfolds=3, CVqrep=1, CVqStrt=TRUE, \dots)
 
 \method{RFlda}{data.frame}(data, \dots)
@@ -40,7 +41,7 @@ present, the probabilities should be specified in the order of the factor levels
   \item{VSelfunct}{Variable selection function. Either the string \dQuote{none} (no selection is to be performed) or a function that takes \sQuote{data} and \sQuote{grouping} as its first two arguments and returns a list with two components: (i) \sQuote{nvkpt} - the number of variables to be used in the Discriminant rule; and (ii) \sQuote{vkptInd} - the indices of the variables to be used in the Discriminant rule. The default is the \sQuote{SelectV} function that, by default, selects variables by the Expanded HC scheme described in Duarte Silva (2011).} 
 
   \item{ldafun}{Type of discriminant linear functions computed. The alternatives are \dQuote{canonical} for maximum-discrimination canonical
-functions and  \dQuote{classification} for direct-classification functions.}
+linear functions and  \dQuote{classification} for direct-classification linear functions.}
 
   \item{nstarts}{Number of different randomly generated starting points used in the minimization of the Frobenius norm of the correlation (or covariance) matrix approximation.}
 
@@ -66,8 +67,7 @@ If algument \sQuote{ldafun} is set to \dQuote{canonical} an object of class \sQu
 \item{vkpt}{A vector with the indices of the variables kept in the discriminant rule if the number of variables kept is less than \sQuote{ncol(data)}. NULL otherwise.} 
 \item{nvkpt}{The number of variables kept in the discriminant rule if this number is less than\sQuote{ncol(data)}. NULL otherwise.} 
 \item{q}{The number of o factors used in the factor model chosen.} 
-\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix.
-\sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
+\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix. \sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 \item{SigFqInv}{An object of class \sQuote{SigFqInv} with the q-factor model approximation to the within groups precision (inverse covariance) matrix. \sQuote{SigFqInv} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 \item{N}{The number of observations used.} 
 \item{call}{The (matched) function call.} 
@@ -81,8 +81,7 @@ If algument \sQuote{ldafun} is set to \dQuote{classification} an object of class
 \item{vkpt}{A vector with the indices of the variables kept in the discriminant rule if the number of variables kept is less than \sQuote{ncol(data)}. NULL otherwise.} 
 \item{nvkpt}{The number of variables kept in the discriminant rule if this number is less than\sQuote{ncol(data)}. NULL, otherwise.} 
 \item{q}{The number of o factors used in the factor model chosen.} 
-\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix.}
-\sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.
+\item{SigFq}{An object of class \sQuote{SigFq} with the q-factor model approximation to the within groups covariance matrix. \sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 \item{SigFqInv}{An object of class \sQuote{SigFqInv} with the q-factor model approximation to the within groups precision (inverse covariance) matrix. \sQuote{SigFqInv} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 \item{N}{The number of observations used.} 
 \item{call}{The (matched) function call.} 
@@ -99,7 +98,8 @@ If algument \sQuote{ldafun} is set to \dQuote{classification} an object of class
 
 \examples{
 
-#train classifier with 10 genes (after a logarithmic transformation) on Alon's Colon Cancer Data set. 
+#train classifier with 10 genes (after a logarithmic transformation) 
+# on Alon's Colon Cancer Data set. 
 
 log10genes <- log10(AlonDS[,-1])
 
@@ -115,9 +115,9 @@ cat("Original classes:\n")
 print(AlonDS$grouping)             		 
 
 # Estimate error rates by four-fold cross-validation.
-# (Note: In cross-validation analysis it is recommended to set the argument 
-# 'ldafun' to "classification", in order to speed up computations by avoiding 
-# unecessary eigen-decompositions) 
+# Note: In cross-validation analysis it is recommended to set 
+# the argument 'ldafun' to "classification", in order to speed up 
+# computations by avoiding unecessary eigen-decompositions 
 
 CrosValRes1 <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=RFlda,
 Selmethod="fixedp",ldafun="classification",maxp=10,kfold=4,CVrep=1)
@@ -129,7 +129,8 @@ ldarule2 <- RFlda(log10genes,AlonDS$grouping,q="CVq",CVqtrials=1:2,
 Selmethod="fixedp",ldafun="classification",maxp=10)
 cat("Best error rate estimate found with q =",ldarule2$q,"\n")
 
-# Perform the analysis finding the number of selected genes by the Expanded HC scheme 
+# Perform the analysis finding the number of selected genes 
+# by the Expanded HC scheme 
 
 ldarule3 <- RFlda(log10genes,AlonDS$grouping,q=ldarule2$q)     
 cat("Number of selected genes =",ldarule3$nvkpt,"\n")

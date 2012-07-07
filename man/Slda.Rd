@@ -13,8 +13,9 @@
 
 \usage{
 
-\method{Slda}{default}(data, grouping, prior = "proportions", StddzData=TRUE, VSelfunct = SelectV,
-Trgt=c("CnstDiag","Idntty","VarDiag"), minp=20, ldafun=c("canonical","classification"), \dots)
+\method{Slda}{default}(data, grouping, prior = "proportions", StddzData=TRUE, 
+VSelfunct = SelectV, Trgt=c("CnstDiag","Idntty","VarDiag"), 
+minp=20, ldafun=c("canonical","classification"), \dots)
 
 \method{Slda}{data.frame}(data, \dots)
 }
@@ -36,7 +37,7 @@ present, the probabilities should be specified in the order of the factor levels
   \item{minp}{Minimum number of variables required for the estimation of the target intensity to be considered reliable. If the dimension of Sigma is below pmin, no shrunken estimate is computed and the original sample covariance is employed.}
 
   \item{ldafun}{Type of discriminant linear functions computed. The alternatives are \dQuote{canonical} for maximum-discrimination canonical
-functions and  \dQuote{classification} for direct-classification functions.}
+linear functions and \dQuote{classification} for direct-classification linear functions.}
 
   \item{\dots}{Further arguments passed to or from other methods.}
 }
@@ -86,11 +87,18 @@ Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensi
 
 \author{A. Pedro Duarte Silva}
 
-\seealso{\code{\link{SelectV}}, \code{\link{ShrnkSigE}}, \code{\link{ShrnkMat}}, \code{\link{ShrnkMatInv}}, \code{\link{predict.canldaRes}}, \code{\link{predict.clldaRes}}, \code{\link{AlonDS}}}
+\seealso{
+
+\code{\link{SelectV}}, \code{\link{ShrnkSigE}}, \code{\link{ShrnkMat}}, \code{\link{ShrnkMatInv}}, 
+
+\code{\link{predict.canldaRes}}, \code{\link{predict.clldaRes}}, \code{\link{AlonDS}}
+
+}
 
 \examples{
 
-# train classifier on Alon's Colon Cancer Data set after a logarithmic transformation 
+# train classifier on Alon's Colon Cancer Data set 
+# after a logarithmic transformation 
 # (selecting genes by the Expanded HC scheme). 
 
 ldarule <- Slda(log10(AlonDS[,-1]),AlonDS$grouping)     
@@ -110,12 +118,12 @@ print(AlonDS[,1])
 
 
 # Estimate error rates by four-fold cross-validation.
-# (Note: In cross-validation analysis it is recommended to set the argument 
-# 'ldafun' to "classification", in order to speed up computations by avoiding 
-# unecessary eigen-decompositions) 
+# Note: In cross-validation analysis it is recommended to set 
+# the argument 'ldafun' to "classification", in order to speed up 
+# computations by avoiding unecessary eigen-decompositions 
 
-CrosValRes <- DACrossVal(log10(AlonDS[,-1]),AlonDS$grouping,TrainAlg=Slda,ldafun="classification",
-kfold=4,CVrep=1)
+CrosValRes <- DACrossVal(log10(AlonDS[,-1]),AlonDS$grouping,TrainAlg=Slda,
+ldafun="classification",kfold=4,CVrep=1)
 summary(CrosValRes[,,"Clerr"])
          	       
 }

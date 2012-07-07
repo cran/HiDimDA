@@ -9,12 +9,16 @@
 
 \title{Class object used for storing the results of a canonical high-dimensional linear discriminant analysis.}
 
-\description{\sQuote{predict.ldaRes} Classifies multivariate observations in conjunction with a \sQuote{canldaRes} object.
-             \sQuote{print.ldaRes} is the S3 print method for \sQuote{canldaRes} objects.
-             \sQuote{coef.ldaRes} is the S3 coef method for \sQuote{canldaRes} objects. }
+\description{\sQuote{predict.canldaRes} classifies multivariate observations in conjunction with a \sQuote{canldaRes} object.
+
+             \sQuote{print.canldaRes} is the S3 print method for \sQuote{canldaRes} objects.
+
+             \sQuote{coef.canldaRes} is the S3 coef method for \sQuote{canldaRes} objects.
+}
 
 \usage{
-\method{predict}{canldaRes}(object, newdata, prior=object$prior, grpcodes=NULL, nbvrs=ncol(object$scaling), \dots)
+\method{predict}{canldaRes}(object, newdata, prior=object$prior, grpcodes=NULL, 
+nbvrs=ncol(object$scaling), \dots)
 }
 
 \arguments{
@@ -45,9 +49,9 @@
 
 \item{Z}{A matrix with the values of the canonical discriminant variates.}
 
-\item{Zmeans}{A matrix with the canonical-space group centroids.}
+\item{Zmeans}{A matrix with the group centroids in the canonical space.}
 }
 
-\seealso{\code{\link{Dlda}}, \code{\link{Mlda}}, \code{\link{Slda}}, \code{\link{RFlda}},  \code{\link{print}}, \code{\link{coef}}, \code{\link{clldaRes}}, \code{\link{CovE}}, , \code{\link{ICovE}} }
+\seealso{ \code{\link{Dlda}}, \code{\link{Mlda}}, \code{\link{Slda}}, \code{\link{RFlda}},  \code{\link{print}}, \code{\link{coef}} }
 
 

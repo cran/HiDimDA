@@ -51,7 +51,7 @@ Mlda.data.frame <- function(data,...)
 
 is.Mlda <- function(x)  inherits(x,"Mlda")
 
-MldaInvE <- function(M,check=TRUE,onlyMinv=TRUE,numtol=sqrt(Machine$double.eps))
+MldaInvE <- function(M,check=TRUE,onlyMinv=TRUE,numtol=sqrt(.Machine$double.eps))
 {
 	if (check && !is.matrix(M)) stop("NldaInvE only accepts square matrix arguments.\n")
 	p <- ncol(M)

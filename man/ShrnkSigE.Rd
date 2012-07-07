@@ -9,8 +9,8 @@ and generalizations of Ledoit and Wolf's (2004) optimal optimal shrunken covaria
 }
 
 \usage{  
-ShrnkSigE(df, p , SigmaRank, Sigma=NULL, SigmaSr=NULL, check=TRUE, Trgt,
-minp=20, numtol=sqrt(.Machine$double.eps), \dots)  
+ShrnkSigE(df, p , SigmaRank, Sigma=NULL, SigmaSr=NULL, check=TRUE, 
+Trgt, minp=20, numtol=sqrt(.Machine$double.eps), \dots)  
 }
 
 \arguments{

@@ -2,7 +2,7 @@
 
 \alias{SelectV}
 
-\title{Variable Selection for High-Dimensional Discriminant Analysis.}
+\title{Variable Selection for High-Dimensional Supervised Classification.}
 
 \description{Selects variables to be used in a Discriminant Analysis classification rule.}
 
@@ -21,10 +21,11 @@
 The variable rankings are based on absolute-value t-scores or ANOVA F-scores.
 }
 
-\usage{SelectV(data, grouping, Selmethod=c("ExpHC","HC","Fdr","Fair","fixedp"),
+\usage{SelectV(data, grouping, 
+Selmethod=c("ExpHC","HC","Fdr","Fair","fixedp"),
 NullDist=c("locfdr","Theoretical"), uselocfdr=c("onlyHC","always"), 
-minlocfdrp=200, comvar=TRUE, Fdralpha=0.5, ExpHCalpha=0.5, HCalpha0=0.1,
-maxp=ncol(data), tol=1E-12, \dots)}
+minlocfdrp=200, comvar=TRUE, Fdralpha=0.5, 
+ExpHCalpha=0.5, HCalpha0=0.1, maxp=ncol(data), tol=1E-12, \dots)}
 
 \arguments{
 
@@ -102,16 +103,14 @@ Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensi
 
 # Compare the number of variables selected by the four methods 
 # currently available  on Alon's Colon Cancer Data set 
-# (after a logarithmic transformation). 
-# Use classical pvalues in the original HC approach
+# after a logarithmic transformation. 
 
 log10genes <- log10(AlonDS[,-1])
 
 Res <- array(dim=4)
 names(Res) <- c("ExpHC","HC","Fdr","Fair")
 Res[1] <- SelectV(log10genes,AlonDS[,1])$nvkpt
-Res[2] <- SelectV(log10genes,AlonDS[,1],
-Selmethod="HC",NullDist="Theoretical")$nvkpt
+Res[2] <- SelectV(log10genes,AlonDS[,1],Selmethod="HC")$nvkpt
 Res[3] <- SelectV(log10genes,AlonDS[,1],Selmethod="Fdr")$nvkpt
 Res[4] <- SelectV(log10genes,AlonDS[,1],Selmethod="Fair")$nvkpt
 

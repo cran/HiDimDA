@@ -57,7 +57,7 @@ SelectV <- function(data,grouping,Selmethod=c("ExpHC","HC","Fdr","Fair","fixedp"
    if (NullDist=="locfdr" && uselocfdr == "always") pvalues <- locfdrpval(pvalues)
    if (Selmethod=="ExpHC" || Selmethod=="Fdr")  
    {
-       	sortedpv <- sort(pvalues,index.return=TRUE)
+      sortedpv <- sort(pvalues,index.return=TRUE)
 	if (Selmethod=="ExpHC") usefullpv <- sortedpv$x[sortedpv$x<ExpHCalpha*1:p/(p*sum(1/1:p))]
 	else usefullpv <- sortedpv$x[sortedpv$x<Fdralpha*1:p/p]
 	if (length(usefullpv)==0) Fdrnvar <- 1
@@ -70,6 +70,7 @@ SelectV <- function(data,grouping,Selmethod=c("ExpHC","HC","Fdr","Fair","fixedp"
 	Stddata <- Fairstdbygrps(data,grouping,nk,n,p) 
 	if (n-k>p) Fairres <- Fair(scores^2,p,nk,R=t(Stddata)%*%Stddata)
 	else Fairres <- Fair(scores^2,p,nk,StdDt=Stddata)
+	names(Fairres$m) <- NULL
 	return(list(nvkpt=Fairres$m,vkptInd=Fairres$vkptInd))
    }
    if (NullDist=="locfdr" && uselocfdr == "onlyHC") pvalues <- locfdrpval(pvalues)
@@ -78,10 +79,12 @@ SelectV <- function(data,grouping,Selmethod=c("ExpHC","HC","Fdr","Fair","fixedp"
 		if (Selmethod== "ExpHC") minvar <- Fdrnvar
 		else minvar <- 1
  		HCres <- HC(p,pvalues,minvkpt=minvar,alpha0=min(HCalpha0,maxp/p))
+		names(HCres$nkptvar) <- NULL
 		return(list(nvkpt=HCres$nkptvar,vkptInd=HCres$varkept))
 	}
 	else {
 		if (Selmethod == "Fdr") nkptvar = Fdrnvar
+		names(nkptvar) <- NULL
 		return(list(nvkpt=nkptvar,vkptInd=sortedpv$ix[1:nkptvar]))
   	}
    } 

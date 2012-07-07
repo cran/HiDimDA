@@ -43,5 +43,11 @@
 
 \value{A vector or a (traditional numeric) matrix with the result of the matrix product.}
 
-\seealso{\code{\link{DMat}}, \code{\link{FrobSigAp}}, \code{\link{ShrnkMat}}, \code{\link{ShrnkMatInv}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{solve.DMat}}, \code{\link{solve.ShrnkMat}}, \code{\link{solve.ShrnkMatInv}}, \code{\link{solve.SigFq}}, \code{\link{solve.SigFqInv}}}
+\seealso{
+
+\code{\link{DMat}}, \code{\link{FrobSigAp}}, \code{\link{ShrnkMat}}, \code{\link{ShrnkMatInv}}, \code{\link{SigFq}}, \code{\link{SigFqInv}}, \code{\link{solve.DMat}}, 
+
+\code{\link{solve.ShrnkMat}}, \code{\link{solve.ShrnkMatInv}}, \code{\link{solve.SigFq}}, \code{\link{solve.SigFqInv}}
+
+}
 

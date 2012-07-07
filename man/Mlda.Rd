@@ -14,8 +14,9 @@
 
 \usage{
 
-\method{Mlda}{default}(data, grouping, prior = "proportions", StddzData=TRUE, VSelfunct = SelectV, 
-ldafun=c("canonical","classification"), PCAstep=FALSE, \dots)
+\method{Mlda}{default}(data, grouping, prior = "proportions", StddzData=TRUE, 
+VSelfunct = SelectV, ldafun=c("canonical","classification"), 
+PCAstep=FALSE, \dots)
 
 \method{Mlda}{data.frame}(data, \dots)
 }
@@ -33,9 +34,9 @@ present, the probabilities should be specified in the order of the factor levels
   \item{VSelfunct}{Variable selection function. Either the string \dQuote{none} (no selection is to be performed) or a function that takes \sQuote{data} and \sQuote{grouping} as its first two arguments and returns a list with two components: (i) \sQuote{nvkpt} - the number of variables to be used in the Discriminant rule; and (ii) \sQuote{vkptInd} - the indices of the variables to be used in the Discriminant rule. The default is the \sQuote{SelectV} function that, by default, selects variables by the Expanded HC scheme described in Duarte Silva (2011).} 
 
   \item{ldafun}{Type of discriminant linear functions computed. The alternatives are \dQuote{canonical} for maximum-discrimination canonical
-functions and  \dQuote{classification} for direct-classification functions.}
+linear functions and  \dQuote{classification} for direct-classification linear functions.}
 
-  \item{PCAstep}{A boolean flag indicating if data should be first projected into the space spanned by the first nrow(data)-1 Principal Components in problems where nrow(data)-1 is less than the number of selected variables. In applications with a very large number of useful variables seting PCAstep to TRUE avoids many potential memory problems and tends to substantially increase the size of the data sets that can be analyzed by Mlda.}
+  \item{PCAstep}{A flag indicating if data should be first projected into the space spanned by its first nrow(data)-1 Principal Components in problems where nrow(data)-1 is less than the number of selected variables. In applications with a very large number of useful variables seting PCAstep to TRUE avoids many potential memory problems and tends to substantially increase the size of the data sets that can be analyzed by Mlda.}
 
   \item{\dots}{Further arguments passed to or from other methods.}
 }
@@ -81,7 +82,8 @@ Thomaz, Kitani and Gillies (2006) \dQuote{A maximum uncertainty LDA-based approa
 
 \examples{
 
-# train classifier on Alon's Colon Cancer Data Set (after a logarithmic transformation). 
+# train classifier on Alon's Colon Cancer Data Set 
+# (after a logarithmic transformation). 
 
 log10genes <- log10(AlonDS[,-1])
 
@@ -101,12 +103,12 @@ cat("Original classes:\n")
 print(AlonDS$grouping)             		 
 
 # Estimate error rates by four-fold cross-validation.
-# (Note: In cross-validation analysis it is recommended to set the argument 
-# 'ldafun' to "classification", in order to speed up computations by avoiding 
-# unecessary eigen-decompositions) 
+# Note: In cross-validation analysis it is recommended to set 
+# the argument 'ldafun' to "classification", in order to speed up 
+# computations by avoiding unecessary eigen-decompositions 
 
-CrosValRes <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=Mlda,ldafun="classification",
-kfold=4,CVrep=1)
+CrosValRes <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=Mlda,
+ldafun="classification",kfold=4,CVrep=1)
 summary(CrosValRes[,,"Clerr"])
         	       
 }

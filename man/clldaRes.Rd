@@ -10,9 +10,11 @@
 \title{Class object used for storing the results of a  high-dimensional linear discriminant analysis routine 
 	(with \sQuote{ldafun} argument set to \dQuote{classification}).}
 
-\description{\sQuote{predict.ldaRes} Classifies multivariate observations in conjunction with a \sQuote{clldaRes} object.
-             \sQuote{print.ldaRes} is the S3 print method for \sQuote{clldaRes} objects.
-             \sQuote{coef.ldaRes} is the S3 coef method for \sQuote{clldaRes} objects. }
+\description{\sQuote{predict.clldaRes} Classifies multivariate observations in conjunction with a \sQuote{clldaRes} object.
+
+             \sQuote{print.clldaRes} is the S3 print method for \sQuote{clldaRes} objects.
+
+             \sQuote{coef.clldaRes} is the S3 coef method for \sQuote{clldaRes} objects. }
 
 \usage{
 \method{predict}{clldaRes}(object, newdata, prior=object$prior, grpcodes=NULL,\dots)
@@ -39,6 +41,6 @@
 \item{x}{The classification scores of the test cases.}
 }
 
-\seealso{\code{\link{Dlda}}, \code{\link{Mlda}}, \code{\link{Slda}}, \code{\link{RFlda}}, \code{\link{print}}, \code{\link{coef}}, \code{\link{canldaRes}}, \code{\link{CovE}}, \code{\link{ICovE}} }
+\seealso{\code{\link{Dlda}}, \code{\link{Mlda}}, \code{\link{Slda}}, \code{\link{RFlda}}, \code{\link{print}}, \code{\link{coef}} }
 
 
