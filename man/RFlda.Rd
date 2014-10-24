@@ -88,8 +88,10 @@ If algument \sQuote{ldafun} is set to \dQuote{classification} an object of class
 
 }
 
-\references{Pedro Duarte Silva, A. (2006) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
-\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.}
+\references{
+Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
+\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.
+}
 
 \author{A. Pedro Duarte Silva}
 
@@ -119,6 +121,8 @@ print(AlonDS$grouping)
 # the argument 'ldafun' to "classification", in order to speed up 
 # computations by avoiding unecessary eigen-decompositions 
 
+\dontrun{
+
 CrosValRes1 <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=RFlda,
 Selmethod="fixedp",ldafun="classification",maxp=10,kfold=4,CVrep=1)
 summary(CrosValRes1[,,"Clerr"])
@@ -138,4 +142,7 @@ cat("Number of selected genes =",ldarule3$nvkpt,"\n")
 # get classification results
 
 predict(ldarule3,log10genes,grpcodes=levels(AlonDS$grouping))$class           	       
+
+}
+
 }

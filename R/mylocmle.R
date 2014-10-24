@@ -1,4 +1,4 @@
-# Modified version of the locmle function from the locfrd package, that makes an extra test on lines 57 and 59 to ensure that V, mu and 
+# Modified version of the locmle function from the locfde package, that makes an extra test on lines 57 and 59 to ensure that V, mu and 
 # bett[2] are composed by valid finite numbers. 
 # Other than that this file is identical to the original locfns.R file as written by Bradley Efron, Brit B. Turnbull, and Balasubramanian Narasimhan.
 
@@ -6,7 +6,8 @@
 ## We need the splines library, so we load it.
 ##
 
-.onLoad <- function(lib, pkg) require(splines)
+#.onLoad <- function(lib, pkg) require(splines)
+require(splines) # Code modification  !!
 
 mylocmle <-
 function(z, xlim , Jmle = 35, d = 0, s = 1, ep = 1/100000, sw = 0, Cov.in)

@@ -101,6 +101,8 @@ Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensi
 
 \examples{
 
+\dontrun{
+
 # Compare the number of variables selected by the four methods 
 # currently available  on Alon's Colon Cancer Data set 
 # after a logarithmic transformation. 
@@ -115,6 +117,8 @@ Res[3] <- SelectV(log10genes,AlonDS[,1],Selmethod="Fdr")$nvkpt
 Res[4] <- SelectV(log10genes,AlonDS[,1],Selmethod="Fair")$nvkpt
 
 print(Res)
+}
+
 }
 
 

@@ -59,8 +59,12 @@ summary(CrosValRes1[,,"Clerr"])
 # linear discriminant rule with the best fifty genes, 
 # by four-fold cross-validation.
 
+\dontrun{
+
 CrosValRes2 <- DACrossVal(log10(AlonDS[,-1]),AlonDS$grouping,TrainAlg=RFlda,
 ldafun="classification",Selmethod="fixedp",maxp=50,kfold=4,CVrep=1)
 summary(CrosValRes2[,,"Clerr"])
+
+}
 
 }

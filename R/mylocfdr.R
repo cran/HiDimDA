@@ -1,4 +1,4 @@
-# Modified version of the locfdr function from the locfrd package that deactivates warning messages and returns with an error code instead of stoping when the estimation fails. 
+# Modified version of the locfdr function from the locfdr package that deactivates warning messages and returns with an error code instead of stoping when the estimation fails. 
 # Other than that, this function is identical to the original locfdr as written by Bradley Efron, Brit B. Turnbull, and Balasubramanian Narasimhan.
 
 mylocfdr <-

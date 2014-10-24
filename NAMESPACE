@@ -1,4 +1,5 @@
 useDynLib(HiDimDA)
+import(splines)
 exportClasses(Dlda, Mlda, Slda, RFlda, DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, ldaRes)
 exportMethods(Dlda, Mlda, Slda, RFlda, LeftMult, RightMult, CovE, ICovE)
 export(DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, MldaInvE, ShrnkSigE, SelectV, DACrossVal, FrobSigAp, FrobSigAp1, ForbSigap, ForbSigap1)

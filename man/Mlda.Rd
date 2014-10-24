@@ -107,8 +107,11 @@ print(AlonDS$grouping)
 # the argument 'ldafun' to "classification", in order to speed up 
 # computations by avoiding unecessary eigen-decompositions 
 
+\dontrun{
+
 CrosValRes <- DACrossVal(log10genes,AlonDS$grouping,TrainAlg=Mlda,
 ldafun="classification",kfold=4,CVrep=1)
 summary(CrosValRes[,,"Clerr"])
-        	       
+ 
+}       	       
 }

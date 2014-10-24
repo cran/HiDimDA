@@ -121,9 +121,10 @@ int fhess(double *B,vector<double>& Baij,vector<double>& Basq,vector<double>& Bi
 				4 * ( Bab[ind3[a]+b-a-1] - Babj[ind5[a]+ind4[b-a-1]+j-b] );
 			for (int l=b;l<p;l++)  {
 				indbl = ind[b]+l-b;
-				if (indbl>indaj && l!=j) 
-					if (j>=b) fh[ind1[indaj]+indbl-indaj] = 4 * B[ind[a]+l-a]*B[ind[b]+j-b];
-					else fh[ind1[indaj]+indbl-indaj] = 0.;
+				if (indbl>indaj && l!=j)  {
+					if (j>=b) { fh[ind1[indaj]+indbl-indaj] = 4 * B[ind[a]+l-a]*B[ind[b]+j-b]; }
+					else { fh[ind1[indaj]+indbl-indaj] = 0.; }
+				}
 			}
 		}
 	}
@@ -184,8 +185,14 @@ int fgrad1(double *B,vector<double>& Bij,vector<int>& iviol,vector<double>& fg,i
 		for (int b=1;b<=imin3(i,j,q-1);b++) Bij[indij] += B[ind[b]+j-b]*B[ind[b]+i-b];
 	}
 	for (int i=0;i<p;i++) {
-		Sigmaij = (tmp=SigmSr[indi=i*Srank])*tmp;
-		for (int k=1;k<Srank;k++)  Sigmaij += (tmp=SigmSr[indi+k])*tmp; 		
+//		Sigmaij = (tmp=SigmSr[indi=i*Srank])*tmp;
+//		for (int k=1;k<Srank;k++)  Sigmaij += (tmp=SigmSr[indi+k])*tmp; 		
+		tmp = SigmSr[indi=i*Srank];
+		Sigmaij = tmp*tmp;
+		for (int k=1;k<Srank;k++) {
+			tmp=SigmSr[indi+k]; 		
+			Sigmaij += tmp*tmp; 		
+		}
 		dist = Sigmaij - Bij[ind[i]];
 		if (dist < k0)  {
 			iviol[i] = TRUE;
@@ -193,7 +200,7 @@ int fgrad1(double *B,vector<double>& Bij,vector<int>& iviol,vector<double>& fg,i
 		}
 		else iviol[i] = FALSE;
 	}
-    for (int a=0;a<q;a++) for (int j=a;j<p;j++)  {
+	for (int a=0;a<q;a++) for (int j=a;j<p;j++)  {
 		tmp = 0.;
 		for (int i=a;i<p;i++) if(i!=j) {
 			indi = imin(i,j)*Srank;
@@ -209,19 +216,20 @@ int fgrad1(double *B,vector<double>& Bij,vector<int>& iviol,vector<double>& fg,i
     return(0);
 }
 
-int fhess1(double *B,vector<double>& Baij,vector<double>& Basq,vector<double>& Bij,vector<double>& Bjl,vector<double>& Bab,vector<double>& Babj,
-		vector<int>& iviol,vector<double>& fh,int p,int q,double *SigmSr,int Srank,
-		vector<int>& ind,vector<int>& ind1,vector<int>& ind2,vector<int>& ind3,vector<int>& ind4,vector<int>& ind5,double k0,double penF)
+int fhess1(double *B,vector<double>& Baij,vector<double>& Basq,vector<double>& Bij,vector<double>& Bjl,
+	vector<double>& Bab,vector<double>& Babj,vector<int>& iviol,vector<double>& fh,int p,int q,double *SigmSr,
+	int Srank,vector<int>& ind,vector<int>& ind1,vector<int>& ind2,vector<int>& ind3,vector<int>& ind4,vector<int>& ind5,
+	double k0,double penF)
 {
-    int npar,combij,indi,indj,indl,indaj,indbj,indbl,ind4ij,indab,indabj;
-    double Sigmaij,tmp,dist,viol=0.;
+	int npar,combij,indi,indj,indl,indaj,indbj,indbl,ind4ij,indab,indabj;
+	double Sigmaij,tmp,dist,viol=0.;
 
-    { for (int i=0;i<p;i++) ind[i] = i*p-i*(i-1)/2; }	
+	{ for (int i=0;i<p;i++) ind[i] = i*p-i*(i-1)/2; }	
 	npar = q*(q+1)/2 + (p-q)*q; 
 	{ for (int i=0;i<npar;i++) ind1[i] = i*npar-i*(i-1)/2; }
 	combij = p*(p+1)/2 ; 
 	{ for (int i=0;i<p;i++) ind2[i] = i*combij-i*(i-1)/2; }
-    { for (int i=0;i<q;i++) ind3[i] = i*q-i*(i-1)/2; }	
+	{ for (int i=0;i<q;i++) ind3[i] = i*q-i*(i-1)/2; }	
 	{ for (int i=0;i<=p;i++) ind4[i] = i*(p-1)-i*(i-1)/2; }
 	{ int ind0=0; for (int i=0;i<q-1;i++) ind0 = ind5[i] = ind0+ind4[q-i]; }
 
@@ -259,16 +267,23 @@ int fhess1(double *B,vector<double>& Baij,vector<double>& Basq,vector<double>& B
 				4 * ( Bab[ind3[a]+b-a-1] - Babj[ind5[a]+ind4[b-a-1]+j-b] );
 			for (int l=b;l<p;l++)  {
 				indbl = ind[b]+l-b;
-				if (indbl>indaj && l!=j) 
-					if (j>=b) fh[ind1[indaj]+indbl-indaj] = 4 * B[ind[a]+l-a]*B[ind[b]+j-b];
-					else fh[ind1[indaj]+indbl-indaj] = 0.;
+				if (indbl>indaj && l!=j) {
+					if (j>=b) { fh[ind1[indaj]+indbl-indaj] = 4 * B[ind[a]+l-a]*B[ind[b]+j-b]; }
+					else { fh[ind1[indaj]+indbl-indaj] = 0.; }
+				}
 			}
 		}
 	}
 
 	for (int i=0;i<p;i++)  {
-		Sigmaij = (tmp=SigmSr[indi=i*Srank])*tmp;
-		for (int k=1;k<Srank;k++)  Sigmaij += (tmp=SigmSr[indi+k])*tmp; 		
+//		Sigmaij = (tmp=SigmSr[indi=i*Srank])*tmp;
+//		for (int k=1;k<Srank;k++)  Sigmaij += (tmp=SigmSr[indi+k])*tmp; 		
+		tmp = SigmSr[indi=i*Srank];
+		Sigmaij = tmp*tmp;
+		for (int k=1;k<Srank;k++) {
+			tmp=SigmSr[indi+k]; 		
+			Sigmaij += tmp*tmp; 		
+		}
 		dist = Sigmaij - Baij[ind[i]];
 		for (int a=1;a<imin(q,i+1);a++) dist -= Baij[ind2[a]+ind[i-a]];
 		if (dist < k0)  {

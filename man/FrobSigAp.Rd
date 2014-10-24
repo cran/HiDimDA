@@ -49,8 +49,10 @@ atol = 1e-20, rtol = 100 * sqrt(.Machine$double.eps))
 \value{ An object of class \sQuote{SigFq} representing the covariance assumed by the closest q-factor model.
 \sQuote{SigFq} objects have specialized methods for matrix inversion, multiplication, and element-wise arithmetic operations.}
 
-\references{Pedro Duarte Silva, A. (2006) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
-\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.}
+\references{
+Pedro Duarte Silva, A. (2011) \dQuote{Two Group Classification with High-Dimensional Correlated Data: A Factor Model Approach}, 
+\emph{Computational Statistics and Data Analysis}, 55 (1), 2975-2990.
+}
 
 \author{A. Pedro Duarte Silva}
 

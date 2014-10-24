@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab HiDimDA\cr
 Type: \tab Package\cr
-Version: \tab 0.2-1\cr
-Date: \tab 2012-07-07\cr
+Version: \tab 0.2-2\cr
+Date: \tab 2014-10-24\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr
 LazyData: \tab yes\cr

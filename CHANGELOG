@@ -1,3 +1,13 @@
+########## Version 0.2-2 (October 2014) ###################
+
+The following changes were made in Version 0.3 of R package MAINT.Data:
+
+1) In the DESCRIPTION file the Depends directive for imported packages was repalced by an Imports directive
+
+2) A few lines of the the c++ source code were changed in order to enforce compatibility
+   with the compilers used by the flavours r-devel-linux-x86_64-fedora-clang,
+   r-devel-linux-x86_64-fedora-gcc and r-devel-osx-x86_64-clang. 
+
 ########## Version 0.2-1 (July 2012) ###################
 
 A makevar.win file was added to the src directory in order to proper
