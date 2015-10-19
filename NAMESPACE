@@ -1,5 +1,7 @@
 useDynLib(HiDimDA)
+import(stats)
 import(splines)
+importFrom(graphics, abline, hist, lines, matplot, par, points, text, title)
 
 S3method("*",DMat)
 S3method("*",ShrnkMat) 
