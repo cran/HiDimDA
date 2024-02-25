@@ -1,10 +1,10 @@
 Package: HiDimDA
 Type: Package
 Title: High Dimensional Discriminant Analysis
-Version: 0.2-4
-Date: 2015-10-18
-Author: Antonio Pedro Duarte Silva <psilva@porto.ucp.pt>
-Maintainer: Antonio Pedro Duarte Silva <psilva@porto.ucp.pt>
+Version: 0.2-6
+Date: 2024-02-25
+Author: Antonio Pedro Duarte Silva <psilva@ucp.pt>
+Maintainer: Antonio Pedro Duarte Silva <psilva@ucp.pt>
 Depends: R (>= 2.10.0)
 Imports: splines
 Suggests: MASS
@@ -16,8 +16,7 @@ Description: Performs linear discriminant analysis in high dimensional
         for classifier training, prediction, cross-validation and
         variable selection.
 License: GPL (>= 3)
-URL: http://www.r-project.org
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2015-10-18 17:56:43 UTC; antonio
-Date/Publication: 2015-10-19 08:41:33
+Packaged: 2024-02-25 19:31:26 UTC; antonio
+Date/Publication: 2024-02-25 23:20:03 UTC

@@ -44,12 +44,6 @@ print.DMat <- function(x,...)
 	cat("Diagonal Matrix:\n",x,"\n")
 }
 
-#drop.DMat <- function(x)
-#{
-#	if (length(x) > 1) stop("drop method is only available for one-dimensinoal DMat objects.\n")
-#	as.numeric(x)
-#}
-
 "+.DMat" <- function(x,a)
 {	
    if (is.DMat(x)) {

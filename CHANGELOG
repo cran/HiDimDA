@@ -1,3 +1,10 @@
+########## Versions 0.2-5 and 0.2.6 (February 2024) ###################
+
+The exportClasses and exportMethods directives were removed, since HIimDimDA only
+uses S3 classes and methods and not S4 classes. Furthermore, the C routines were now
+registered using the  ‘R_registerRoutines’ and ‘R_useDynamicSymbols’ C utilities,
+and some explicitly comparisons between classes and strings were replaced by inherits commands.  
+
 ########## Version 0.2-4 (October 2015) ###################
 
 The default package "stats" and several functions from the default package "graphics" were imported 

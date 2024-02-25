@@ -1,16 +1,16 @@
-8cc7b7ccd6dab95b0e0a2f813cc90710 *CHANGELOG
-200b497c2dd60698ffce96c0cf8fc2eb *DESCRIPTION
-c9bc9be9fe9f7eb0807b162d65c65da0 *NAMESPACE
+42240c73c4762f9a1378ddf830e41d7b *CHANGELOG
+c9bbcb65e9aa81e2921c93a725f69c02 *DESCRIPTION
+15b52cb7d85c2dfdbd10208e0c8d5fc2 *NAMESPACE
 d7289730f36fad9451dd9c8e4434ce0f *R/CInterface.R
 aab42b1560423ff69150ad7d6586faaf *R/DACrossVal.R
-1decd87b926a9c621e9aebc5a39a2e76 *R/DMat.R
+0847d2c00fd3ff53e621dad4195286c1 *R/DMat.R
 c2ddf864ed8d99b870947c85cbcb4fd4 *R/Dlda.R
 ba4f6a147c54c2bbbf6e79895a9d1191 *R/FrobSigAp.R
 c5549ffb36c471e41bcd6b72d23873d3 *R/FrobSigAp1.R
 80d664e376f753bb8b61d9a28f69828d *R/Mlda.R
 32c473765e96412861fe9fcbf17fc96d *R/RFlda.R
 7cdad8f93e2d1679e05fcb6e82b10983 *R/RepLOptim.R
-693cf05a603521a6239cb34840ebc5bf *R/SelectV.R
+60c533fd35359fca97cfaaa73e4cb4ac *R/SelectV.R
 fc17e10abaa331277554756c25c48fcb *R/ShrnkMat.R
 6afd50fd980e229f5e1cce15640f12cf *R/ShrnkMatInv.R
 33a98d3b46afad857adec4c6c9a7f10d *R/SigFq.R
@@ -30,7 +30,7 @@ a367e1c1c3f912dbff2f0853553a19b4 *man/DACrossVal.Rd
 2fa840c85275ebb2d738cb3607654064 *man/Dlda.Rd
 bf66bbc7395473803252887c11607512 *man/FrobSigAp.Rd
 9ab0e4f4b75fe6876c981cc64e662aeb *man/HiDimDA-internal.Rd
-608681c7f00ef0377d966b8b5246af64 *man/HiDimDA-package.Rd
+c68757dc9cd8d77e42fb8ceb0eba3d41 *man/HiDimDA-package.Rd
 0395a1c836900924bbd2485745168fe9 *man/MatMult.Rd
 ec2cb26a5be7802027e4dcf57f785a0a *man/Mlda.Rd
 673121c8c2eb29dafb4a17b68136dc73 *man/MldaInvE.Rd
@@ -50,4 +50,5 @@ bfb6a683b4049317bee0f52da490f5f4 *man/SigFqInv.Rd
 fc1b82b356b91685226235c68b199d51 *src/Makevars
 b9019af24c0bdf54d19e439f786fc721 *src/RInterface.cpp
 8b7ea96719523dff347114a4a1a6ebca *src/RInterface.h
+cee42ffc8c430da075e6fa0316324b7d *src/registerDynamicSimbol.cpp
 a5b5ce913e78efc70809c4fc45d9a826 *src/rghtsngv.f

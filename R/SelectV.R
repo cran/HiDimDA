@@ -125,9 +125,12 @@ locfdrpval <- function(pvalues)
 {
 	zscores <- qnorm(pvalues)	#  Note:  This is diferent from defining zscores directly from tscores
 	empnull <- mylocfdr(zscores,plot=0,silently=TRUE)
-	if (class(empnull)=="error1") empnull <- mylocfdr(zscores,plot=0,nulltype=2,silently=TRUE)
-	if (class(empnull)=="error3") empnull <- mylocfdr(zscores,plot=0,nulltype=1,silently=TRUE)
-	if (class(empnull)!="error2")  { 
+#	if (class(empnull)=="error1") empnull <- mylocfdr(zscores,plot=0,nulltype=2,silently=TRUE)
+#	if (class(empnull)=="error3") empnull <- mylocfdr(zscores,plot=0,nulltype=1,silently=TRUE)
+#	if (class(empnull)!="error2")  { 
+	if (inherits(empnull,"error1")) empnull <- mylocfdr(zscores,plot=0,nulltype=2,silently=TRUE)
+	if (inherits(empnull,"error3")) empnull <- mylocfdr(zscores,plot=0,nulltype=1,silently=TRUE)
+	if (!inherits(empnull,"error2"))  { 
 		zscores <- (zscores-empnull$fp0[3,1])/empnull$fp0[3,2]
 		pvalues <- pnorm(zscores)
 	}

@@ -1,6 +1,7 @@
-useDynLib(HiDimDA)
+useDynLib(HiDimDA,.registration=TRUE)
 import(stats)
 import(splines)
+
 importFrom(graphics, abline, hist, lines, matplot, par, points, text, title)
 
 S3method("*",DMat)
@@ -73,8 +74,6 @@ S3method(solve,ShrnkMatInv)
 S3method(solve,SigFq)
 S3method(solve,SigFqInv)
 
-exportClasses(Dlda, Mlda, Slda, RFlda, DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, ldaRes)
-exportMethods(Dlda, Mlda, Slda, RFlda, LeftMult, RightMult, CovE, ICovE)
 export(DMat, ShrnkMat, ShrnkMatInv, SigFq, SigFqInv, MldaInvE, ShrnkSigE, SelectV, DACrossVal, FrobSigAp, FrobSigAp1, ForbSigap, ForbSigap1)
 exportPattern("Dlda.*", "Mlda.*", "Slda.*", "RFlda.*", "LeftMult.*", "RightMult.*", "CovE.*", "ICovE.*", 
 "*.canldaRes", "*.clldaRes", "*.ScanldaRes", "*.SclldaRes", "*.RFcanldaRes", "*.RFclldaRes",  
