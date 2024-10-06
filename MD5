@@ -1,5 +1,5 @@
-42240c73c4762f9a1378ddf830e41d7b *CHANGELOG
-c9bbcb65e9aa81e2921c93a725f69c02 *DESCRIPTION
+b8e217d5d94b9924c1ba3503a83397c5 *CHANGELOG
+c1c634f57cba218c43c26397bbe860a3 *DESCRIPTION
 15b52cb7d85c2dfdbd10208e0c8d5fc2 *NAMESPACE
 d7289730f36fad9451dd9c8e4434ce0f *R/CInterface.R
 aab42b1560423ff69150ad7d6586faaf *R/DACrossVal.R
@@ -25,12 +25,12 @@ cd52379b92478583da16869e848c9674 *R/mylocmle.R
 0eff5bb830c233d8de63953b692011f3 *data/AlonDS.rda
 9aeb99b5c6a9908ebb1d63cfec736f89 *man/AlonDS.Rd
 65a50a4621d53d00d61bd243264d2af3 *man/CovE.Rd
-a367e1c1c3f912dbff2f0853553a19b4 *man/DACrossVal.Rd
+40c4c525b917bd7d33a73c16e1c2dc34 *man/DACrossVal.Rd
 86d9173123681c5653ac1d869741f2f7 *man/DMat.Rd
 2fa840c85275ebb2d738cb3607654064 *man/Dlda.Rd
 bf66bbc7395473803252887c11607512 *man/FrobSigAp.Rd
 9ab0e4f4b75fe6876c981cc64e662aeb *man/HiDimDA-internal.Rd
-c68757dc9cd8d77e42fb8ceb0eba3d41 *man/HiDimDA-package.Rd
+54af53388e8894e0ad8dcb45eaac8cfd *man/HiDimDA-package.Rd
 0395a1c836900924bbd2485745168fe9 *man/MatMult.Rd
 ec2cb26a5be7802027e4dcf57f785a0a *man/Mlda.Rd
 673121c8c2eb29dafb4a17b68136dc73 *man/MldaInvE.Rd
@@ -48,7 +48,7 @@ bfb6a683b4049317bee0f52da490f5f4 *man/SigFqInv.Rd
 8a5f9ba201aff1fad223bea89bb3c46d *src/FctqLDA.cpp
 3bf27ef96a5d47e7cdd596edf701ba87 *src/FctqLDA.h
 fc1b82b356b91685226235c68b199d51 *src/Makevars
-b9019af24c0bdf54d19e439f786fc721 *src/RInterface.cpp
+c1dd841e5c91590c391a2bce56b8c3dc *src/RInterface.cpp
 8b7ea96719523dff347114a4a1a6ebca *src/RInterface.h
 cee42ffc8c430da075e6fa0316324b7d *src/registerDynamicSimbol.cpp
-a5b5ce913e78efc70809c4fc45d9a826 *src/rghtsngv.f
+b83319bca894100cbb76a0b45e07f0a9 *src/rghtsngv.f

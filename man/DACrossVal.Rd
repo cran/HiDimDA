@@ -42,7 +42,7 @@ The third dimension has two named levels representing respectively the number of
 
 \author{A. Pedro Duarte Silva}
 
-\seealso{\code{\link{lda}}, \code{\link{RFlda}}, \code{\link{predict.lda}}, \code{\link{predict.clldaRes}}}
+\seealso{\code{\link{RFlda}}, \code{\link{predict.clldaRes}}}
 
 \examples{
 

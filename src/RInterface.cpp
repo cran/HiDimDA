@@ -34,12 +34,12 @@ SEXP RFnDist(SEXP B,SEXP p,SEXP q,SEXP Sigma,SEXP k0,SEXP penF)
     double *cres;;
     ind.resize(nvar); 
 
-    PROTECT(res = allocVector(REALSXP,1));
+    PROTECT(res = Rf_allocVector(REALSXP,1));
     cres = REAL(res);
     
     cres[0] = FnDist(REAL(B),nvar,INTEGER(q)[0],REAL(Sigma),ind,REAL(k0)[0],REAL(penF)[0]);
  
-    PROTECT(dim = allocVector(INTSXP,1));
+    PROTECT(dim = Rf_allocVector(INTSXP,1));
     INTEGER(dim)[0] = 1;
     SET_DIM(res,dim); 
     UNPROTECT(2);
@@ -65,10 +65,10 @@ SEXP Rfgrad(SEXP B,SEXP p,SEXP q,SEXP Sigma,SEXP k0,SEXP penF)
     
     fgrad(REAL(B),Bij,iviol,fg,nvar,nfact,REAL(Sigma),ind,REAL(k0)[0],REAL(penF)[0]);
  
-    PROTECT(res = allocVector(REALSXP,npar));
+    PROTECT(res = Rf_allocVector(REALSXP,npar));
     cres = REAL(res);
     for(int i=0;i<npar;i++) cres[i]= fg[i];
-    PROTECT(dim = allocVector(INTSXP,1));
+    PROTECT(dim = Rf_allocVector(INTSXP,1));
     INTEGER(dim)[0] = npar;
     SET_DIM(res,dim); 
     UNPROTECT(2);
@@ -103,7 +103,7 @@ SEXP Rfhess(SEXP B,SEXP p,SEXP q,SEXP Sigma,SEXP k0,SEXP penF)
      
     fhess(REAL(B),Baij,Basq,Bij,Bjl,Bab,Babj,iviol,fh,nvar,nfact,REAL(Sigma),ind,ind1,ind2,ind3,ind4,ind5,REAL(k0)[0],REAL(penF)[0]);
  
-   PROTECT(res = allocVector(REALSXP,npar*npar));
+   PROTECT(res = Rf_allocVector(REALSXP,npar*npar));
    cres = REAL(res);
    for(int i=0,fhind=0,r=0,c=0;i<npar;i++,fhind+=i)
 	for(int j=0;j<=i;j++)  {
@@ -112,7 +112,7 @@ SEXP Rfhess(SEXP B,SEXP p,SEXP q,SEXP Sigma,SEXP k0,SEXP penF)
 		else r = ++c;   
 	}
 
-   PROTECT(dim = allocVector(INTSXP,2));
+   PROTECT(dim = Rf_allocVector(INTSXP,2));
    INTEGER(dim)[0] = npar;
    INTEGER(dim)[1] = npar;
    SET_DIM(res,dim); 
@@ -130,12 +130,12 @@ SEXP RFnDist1(SEXP B,SEXP p,SEXP q,SEXP SigmSr,SEXP Srank,SEXP k0,SEXP penF)
     double *cres;;
 
     ind.resize(nvar); 
-    PROTECT(res = allocVector(REALSXP,1));
+    PROTECT(res = Rf_allocVector(REALSXP,1));
     cres = REAL(res);
     
     cres[0] = FnDist1(REAL(B),nvar,INTEGER(q)[0],REAL(SigmSr),INTEGER(Srank)[0],ind,REAL(k0)[0],REAL(penF)[0]);
  
-    PROTECT(dim = allocVector(INTSXP,1));
+    PROTECT(dim = Rf_allocVector(INTSXP,1));
     INTEGER(dim)[0] = 1;
     SET_DIM(res,dim); 
     UNPROTECT(2);
@@ -161,10 +161,10 @@ SEXP Rfgrad1(SEXP B,SEXP p,SEXP q,SEXP SigmSr,SEXP Srank,SEXP k0,SEXP penF)
     
     fgrad1(REAL(B),Bij,iviol,fg,nvar,nfact,REAL(SigmSr),INTEGER(Srank)[0],ind,REAL(k0)[0],REAL(penF)[0]);
  
-    PROTECT(res = allocVector(REALSXP,npar));
+    PROTECT(res = Rf_allocVector(REALSXP,npar));
     cres = REAL(res);
     for(int i=0;i<npar;i++) cres[i]= fg[i];
-    PROTECT(dim = allocVector(INTSXP,1));
+    PROTECT(dim = Rf_allocVector(INTSXP,1));
     INTEGER(dim)[0] = npar;
     SET_DIM(res,dim); 
     UNPROTECT(2);
@@ -201,7 +201,7 @@ SEXP Rfhess1(SEXP B,SEXP p,SEXP q,SEXP SigmaSr,SEXP Srank,SEXP k0,SEXP penF)
     fhess1(REAL(B),Baij,Basq,Bij,Bjl,Bab,Babj,iviol,fh,nvar,nfact,REAL(SigmaSr),INTEGER(Srank)[0],ind,
 	ind1,ind2,ind3,ind4,ind5,REAL(k0)[0],REAL(penF)[0]);
  
-   PROTECT(res = allocVector(REALSXP,npar*npar));
+   PROTECT(res = Rf_allocVector(REALSXP,npar*npar));
    cres = REAL(res);
    for(int i=0,fhind=0,r=0,c=0;i<nvar;i++,fhind+=i)
 	for(int j=0;j<=i;j++)  {
@@ -210,7 +210,7 @@ SEXP Rfhess1(SEXP B,SEXP p,SEXP q,SEXP SigmaSr,SEXP Srank,SEXP k0,SEXP penF)
 		else r = ++c;   
 	}
 
-   PROTECT(dim = allocVector(INTSXP,2));
+   PROTECT(dim = Rf_allocVector(INTSXP,2));
    INTEGER(dim)[0] = npar;
    INTEGER(dim)[1] = npar;
    SET_DIM(res,dim); 

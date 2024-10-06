@@ -1,3 +1,9 @@
+########## Versions 0.2-7 (September 2024) ###################
+
+The links to the MASS functions lda and predict.lda were removed for the documentation
+of DACrossVal. Furthermore, the fotran code in file rghtsngv.f was updated in order
+to update some obsolescent definition of character length to modern standards. 
+
 ########## Versions 0.2-5 and 0.2.6 (February 2024) ###################
 
 The exportClasses and exportMethods directives were removed, since HIimDimDA only
